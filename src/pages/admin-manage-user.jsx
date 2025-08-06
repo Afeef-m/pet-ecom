@@ -24,7 +24,6 @@ function AdminManageUser() {
       <div className="border rounded p-4" style={{ backgroundColor: "#f9f9f9" }}>
         <h2 className="mb-4">Admin Manage Users</h2>
 
-        {/* Search & Filter */}
         <div className="row mb-3 g-2">
           <div className="col-md-6">
             <input

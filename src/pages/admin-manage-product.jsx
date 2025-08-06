@@ -99,7 +99,6 @@ function AdminProduct() {
   >
     <h2 className="text-center mb-4">Admin Product Management</h2>
 
-    {/* Form */}
     <div className="card p-3 mb-4 shadow-sm">
       <h4>{edit ? "Edit Product" : "Add New Product"}</h4>
       <div className="row g-3">
@@ -178,7 +177,6 @@ function AdminProduct() {
       </div>
     </div>
 
-    {/* Filter */}
     <div className="mb-3 d-flex flex-column flex-sm-row justify-content-between gap-2">
       <h5 className="mb-0">Products List</h5>
       <select
@@ -193,7 +191,6 @@ function AdminProduct() {
       </select>
     </div>
 
-    {/* Table */}
     <div className="table-responsive">
       <table className="table table-bordered text-center align-middle table-hover shadow-sm">
         <thead className="table-light">

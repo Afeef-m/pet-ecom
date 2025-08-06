@@ -4,10 +4,7 @@ body {
   color: #333;
   scroll-behavior: smooth;
 }
-.hero-section {
-  background-color: #fef6f1;
-  min-height: 80vh;
-}
+
 .highlight-text {
   color: #d59f51;
 }

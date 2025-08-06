@@ -46,7 +46,7 @@ function useOrders() {
   const updateOrderStatus = (id, newStatus) => {
     axios.patch(`http://localhost:3001/orders/${id}`, {
       status: newStatus,
-    }).then((res) => {
+    }).then(() => {
       setOrders((prev) =>
         prev.map((order) =>
           order.id === id ? { ...order, status: newStatus } : order));

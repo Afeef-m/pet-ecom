@@ -68,7 +68,6 @@ function Home() {
 
   return (
     <div className="home-page">
-      {/* Hero Section */}
       <section className="hero-section d-flex align-items-center bg-beige">
         <div className="container d-flex flex-column flex-md-row align-items-center py-5">
           <div className="w-100 w-md-50 text-center">

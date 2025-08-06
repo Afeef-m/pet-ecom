@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
-import "./productdetails.css";
 
 function ProductDetails() {
   const { id } = useParams();
@@ -40,34 +39,33 @@ function ProductDetails() {
   if (!product) return <div className="text-center mt-5">Loading...</div>;
 
   const handleCart = () => {
-  const user = JSON.parse(localStorage.getItem("user"));
-  if (!user) {
-    toast.warning("Login to Add Cart!");
-    return;
-  }
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (!user) {
+      toast.warning("Login to Add Cart!");
+      return;
+    }
 
-  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-  const index = cart.findIndex((item) => item.id === product.id);
+    const index = cart.findIndex((item) => item.id === product.id);
 
-  if (index !== -1) {
-    // Already in cart => Increase quantity
-    cart[index].quantity += parseInt(quantity);
-    toast.success(`Quantity updated to ${cart[index].quantity}`);
-  } else {
-    // Not in cart => Add new item
-    cart.push({
-      ...product,
-      quantity: parseInt(quantity),
-      weight: product.weight || "Unknown",
-    });
-    toast.success("Added to cart!");
-  }
+    if (index !== -1) {
+      // Already in cart => Increase quantity
+      cart[index].quantity += parseInt(quantity);
+      toast.success(`Quantity updated to ${cart[index].quantity}`);
+    } else {
+      // Not in cart => Add new item
+      cart.push({
+        ...product,
+        quantity: parseInt(quantity),
+        weight: product.weight || "Unknown",
+      });
+      toast.success("Added to cart!");
+    }
 
-  localStorage.setItem("cart", JSON.stringify(cart));
-  setInCart(true); // always set true after adding/increasing
-};
-
+    localStorage.setItem("cart", JSON.stringify(cart));
+    setInCart(true); // always set true after adding/increasing
+  };
 
   const handleWishlist = () => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -125,7 +123,14 @@ function ProductDetails() {
             Weight: {product.weight || "Not specified"}
           </p>
 
-          <p className="product-description mt-3">
+          <p
+            className="mt-3"
+            style={{
+              fontsize: "1.1rem",
+              color: "#555",
+              lineHeight: "1.6",
+            }}
+          >
             {product.description || "No description available."}
           </p>
 
@@ -144,13 +149,9 @@ function ProductDetails() {
           </div>
 
           <div className="d-flex flex-wrap gap-3 mt-3">
-            <button
-  className="btn btn-dark"
-  onClick={handleCart}
->
-  {inCart ? "Add More" : "Add to Cart"}
-</button>
-
+            <button className="btn btn-dark" onClick={handleCart}>
+              {inCart ? "Add More" : "Add to Cart"}
+            </button>
 
             <button
               className={`btn ${

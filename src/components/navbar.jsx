@@ -9,13 +9,11 @@ function Navbar() {
   const navbar = useRef(null);
 
   const isAdminRoute = ["/admin-dashboard","/admin-manage-user","/admin-manage-product","/admin-orders"].some((path) =>
-  location.pathname.startsWith(path)
-);
+  location.pathname.startsWith(path));
 
 if (isAdminRoute) {
   return null;
 }
-
 
   useEffect(() => {
     const user = localStorage.getItem("user");
@@ -37,8 +35,6 @@ if (isAdminRoute) {
       Collapse.hide();
     }
   };
-
-
 
 return (
   <nav

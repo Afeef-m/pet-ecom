@@ -27,7 +27,6 @@ function AdminDashboard() {
         <h2 className="text-center fw-bold mb-4">⚙️ Admin Dashboard</h2>
 
         <div className="row justify-content-center g-4">
-          {/* Product Management */}
           <div className="col-md-4">
             <div
               className="card shadow-sm text-center p-4 border-0 h-100"
@@ -47,7 +46,6 @@ function AdminDashboard() {
             </div>
           </div>
 
-          {/* User Management */}
           <div className="col-md-4">
             <div
               className="card shadow-sm text-center p-4 border-0 h-100"
@@ -67,7 +65,6 @@ function AdminDashboard() {
             </div>
           </div>
 
-          {/* Order Management */}
           <div className="col-md-4">
             <div
               className="card shadow-sm text-center p-4 border-0 h-100"

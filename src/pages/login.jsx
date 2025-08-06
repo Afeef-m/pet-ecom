@@ -14,12 +14,10 @@ function Login() {
   const location = useLocation();
 
   useEffect(() => {
-    // Reset form on mount
     setEmail("");
     setPassword("");
     setRole("user");
 
-    // 🔒 Disable back after logout
     window.history.pushState(null, "", window.location.href);
     window.onpopstate = () => {
       window.history.go(1);
@@ -29,7 +27,6 @@ function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    // Basic validation
     if (!email.includes("@gmail.com") || password.length < 4) {
       toast.error("Enter valid email and password with at least 4 characters");
       return;
@@ -79,8 +76,7 @@ function Login() {
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
-      }}
-    >
+      }}>
       <div
         className="card shadow-lg p-4"
         style={{
@@ -90,8 +86,7 @@ function Login() {
           backdropFilter: "blur(5px)",
           border: "1px solid rgba(255, 255, 255, 0.3)",
           color: "#000",
-        }}
-      >
+        }}>
         <h2 className="text-center mb-4 text-primary fw-bold">Login Here</h2>
 
         <form onSubmit={handleLogin} autoComplete="off">
@@ -115,8 +110,7 @@ function Login() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               autoComplete="off"
-              required
-            />
+              required/>
           </div>
           <div className="mb-3">
             <label className="form-label fw-semibold">Password</label>
@@ -127,8 +121,7 @@ function Login() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               autoComplete="new-password"
-              required
-            />
+              required/>
           </div>
 
           <button
@@ -139,8 +132,7 @@ function Login() {
               fontSize: "1rem",
               borderRadius: "8px",
               transition: "all 0.3s ease",
-            }}
-          >
+            }} >
             Sign in
             <SlArrowRightCircle size={20} />
           </button>

@@ -1,6 +1,6 @@
-import { Navigate, useLocation } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 
-function ProtectedRoute({ children, role }) {
+function ProtectedRoute({ role }) {
   const user = JSON.parse(localStorage.getItem("user"));
   const location = useLocation();
 
@@ -9,7 +9,7 @@ function ProtectedRoute({ children, role }) {
   }
 
   if (user.status === "inactive" || user.blocked) {
-    localStorage.removeItem("user"); 
+    localStorage.removeItem("user");
     return <Navigate to="/login" replace />;
   }
 
@@ -17,7 +17,7 @@ function ProtectedRoute({ children, role }) {
     return <Navigate to="/" replace />;
   }
 
-  return children;
+  return <Outlet />; 
 }
 
 export default ProtectedRoute;

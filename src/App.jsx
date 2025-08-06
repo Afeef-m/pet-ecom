@@ -33,22 +33,21 @@ function App() {
         <Route path="/accessory/:id" element={<ProductDetails />} />
 
         {/* User Protected Routes */}
-        <Route path="/cart" element={<ProtectedRoute role="user"><Cart /></ProtectedRoute>} />
-        <Route path="/wishlist" element={<ProtectedRoute role="user"><Wishlist /></ProtectedRoute>} />
-        <Route path="/checkout" element={<ProtectedRoute role="user"><Checkout /></ProtectedRoute>} />
-        <Route path="/orders" element={<ProtectedRoute role="user"><Orders /></ProtectedRoute>} />
-        <Route path="/payment" element={<ProtectedRoute role="user"><Payment /></ProtectedRoute>} />
-
+      <Route element={<ProtectedRoute role="user"/>}>
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/wishlist" element={<Wishlist />} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/orders" element={<Orders />} />
+        <Route path="/payment" element={<Payment />} />
+      </Route>
+      
         {/* Admin Protected Routes */}
-        <Route path='/admin-dashboard' element={
-          <ProtectedRoute role="admin"><AdminDashboard/></ProtectedRoute>} />
-        <Route path='/admin-manage-product' element={
-          <ProtectedRoute role="admin"><AdminProduct/></ProtectedRoute>} />
-        <Route path='/admin-manage-user' element={
-          <ProtectedRoute role="admin"><AdminManageUser/></ProtectedRoute>} />
-       <Route path='/admin-orders' element={
-        <ProtectedRoute><AdminOrders/></ProtectedRoute>
-       }/>
+       <Route element={<ProtectedRoute role="admin"/>}>
+         <Route path='/admin-dashboard' element={<AdminDashboard/>} />
+        <Route path='/admin-manage-product' element={<AdminProduct/>} />
+        <Route path='/admin-manage-user' element={<AdminManageUser/>} />
+       <Route path='/admin-orders' element={<AdminOrders/>}/>
+       </Route>
       </Routes>
     </>
   );

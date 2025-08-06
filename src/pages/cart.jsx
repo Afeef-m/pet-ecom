@@ -67,7 +67,6 @@ function Cart() {
       {cartItems.map((item, index) => (
         <div key={index} className="card mb-4 shadow-sm border-0">
           <div className="row g-0 align-items-center">
-            {/* Product Image */}
             <div className="col-md-2 text-center">
               <img
                 src={item.image}
@@ -77,7 +76,6 @@ function Cart() {
               />
             </div>
 
-            {/* Product Info */}
             <div className="col-md-7">
               <div className="card-body">
                 <h5 className="card-title mb-1">{item.name}</h5>
@@ -86,7 +84,6 @@ function Cart() {
                   Weight: {item.weight || "Unknown"}
                 </p>
 
-                {/* Quantity Control */}
                 <div className="d-flex align-items-center gap-2">
                   <button
                     className="btn btn-sm btn-outline-secondary"
@@ -105,7 +102,6 @@ function Cart() {
               </div>
             </div>
 
-            {/* Remove Button */}
             <div className="col-md-3 text-end pe-4">
               <button
                 className="btn btn-sm btn-outline-danger"
@@ -118,7 +114,6 @@ function Cart() {
         </div>
       ))}
 
-      {/* Total and Checkout */}
       <div className="text-end">
         <h4 className="fw-bold">Total: ₹{total.toLocaleString()}</h4>
         <button className="btn btn-success px-4 mt-2" onClick={handleBuy}>
