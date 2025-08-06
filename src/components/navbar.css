@@ -1,0 +1,23 @@
+.custom-navbar {
+  background-color: #f5f0e6; 
+  color: #333;               
+  border-bottom: 1px solid #ccc;
+  z-index: 10; 
+  transition: top 0.3s;
+}
+
+.custom-navbar .form-control {
+  width: 250px;
+}
+
+@media (max-width: 768px) {
+  .custom-navbar .form-control {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .custom-navbar .d-flex.ms-auto {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
