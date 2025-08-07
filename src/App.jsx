@@ -3,21 +3,22 @@ import Navbar from './components/navbar';
 import { Routes, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
-import AdminDashboard from './pages/admin-dashboard';
-import AdminProduct from './pages/admin-manage-product';
-import AdminManageUser from './pages/admin-manage-user';
-import AdminOrders from './pages/admin-orders';
+import AdminDashboard from './pages/admin/admin-dashboard';
+import AdminProduct from './pages/admin/admin-manage-product';
+import AdminManageUser from './pages/admin/admin-manage-user';
+import AdminOrders from './pages/admin/admin-orders';
 import ProtectedRoute from './components/ProtectedRoute';
 
-import Home from './pages/home';
-import ProductDetails from './pages/productDetails';
-import Register from './pages/register';
-import Login from './pages/login';
-import Cart from './pages/cart';
-import Wishlist from './pages/wishlist';
-import Checkout from './pages/checkout';
-import Orders from './pages/orders';
-import Payment from './pages/payment';
+import Home from './pages/users/home';
+import ProductDetails from './pages/users/productDetails';
+import Register from './pages/users/register';
+import Login from './pages/users/login';
+import Cart from './pages/users/cart';
+import Wishlist from './pages/users/wishlist';
+import Checkout from './pages/users/checkout';
+import Orders from './pages/users/orders';
+import Payment from './pages/users/payment';
+import PublicRoute from './components/publicRoute';
 
 function App() {
   return (
@@ -27,8 +28,12 @@ function App() {
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={<Home />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
+
+        <Route element={<PublicRoute/>}>
+           <Route path="/register" element={<Register />} />
+           <Route path="/login" element={<Login />} />
+        </Route>
+
         <Route path="/product/:id" element={<ProductDetails />} />
         <Route path="/accessory/:id" element={<ProductDetails />} />
 
