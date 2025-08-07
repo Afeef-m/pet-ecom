@@ -54,7 +54,7 @@ function AdminDashboard() {
              <FaUsersCog size={50} className="text-success mb-3 d-block mx-auto" />
               <h4 className="fw-semibold">User Management</h4>
               <p className="text-muted">
-                View, block, or manage registered users.
+                 Manage the registered users.
               </p>
               <button
                 className="btn btn-success w-100"
@@ -72,7 +72,7 @@ function AdminDashboard() {
             >
               <FaClipboardList size={50} className="text-warning mb-3  d-block mx-auto" />
               <h4 className="fw-semibold">Order Management</h4>
-              <p className="text-muted">View and manage all user orders.</p>
+              <p className="text-muted">Manage the all user orders.</p>
               <button
                 className="btn btn-warning w-100"
                 onClick={() => navigate("/admin-orders")}

@@ -26,7 +26,8 @@ function useProduct() {
   };
 
   const updateProduct = (id, updatedData, type) => {
-    axios.patch(`http://localhost:3001/${type}/${id}`, updatedData).then((res) => {
+    axios.patch(`http://localhost:3001/${type}/${id}`, updatedData)
+    .then((res) => {
       type === "products"
         ? setProducts((prev) => prev.map((p) => (p.id === id ? res.data : p)))
         : setAccessories((prev) => prev.map((a) => (a.id === id ? res.data : a)));
@@ -34,7 +35,8 @@ function useProduct() {
   };
 
   const activateProduct = (type, id) => {
-    axios.patch(`http://localhost:3001/${type}/${id}`, { status: "active" }).then((res) => {
+    axios.patch(`http://localhost:3001/${type}/${id}`, { status: "active" })
+    .then((res) => {
       type === "products"
         ? setProducts((prev) => prev.map((p) => (p.id === id ? res.data : p)))
         : setAccessories((prev) => prev.map((a) => (a.id === id ? res.data : a)));
@@ -42,7 +44,8 @@ function useProduct() {
   };
 
   const deleteProduct = (type, id) => {
-    axios.patch(`http://localhost:3001/${type}/${id}`, { status: "inactive" }).then((res) => {
+    axios.patch(`http://localhost:3001/${type}/${id}`, { status: "inactive" })
+    .then((res) => {
       type === "products"
         ? setProducts((prev) => prev.map((p) => (p.id === id ? res.data : p)))
         : setAccessories((prev) => prev.map((a) => (a.id === id ? res.data : a)));

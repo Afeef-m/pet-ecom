@@ -48,7 +48,6 @@ function AdminManageUser() {
           </div>
         </div>
 
-        {/* Users Table */}
         <div className="table-responsive">
           <table className="table table-bordered text-center align-middle">
             <thead className="table-light">
