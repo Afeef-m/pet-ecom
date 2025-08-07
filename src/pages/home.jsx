@@ -16,30 +16,26 @@ function Home() {
   const [sortOrderAcc, setSortOrderAcc] = useState("none");
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [productsRes, accessoriesRes] = await Promise.all([
-          axios.get("http://localhost:3001/products"),
-          axios.get("http://localhost:3001/accessories"),
-        ]);
+  const fetchData = async () => {
+    try {
+      const [productsRes, accessoriesRes] = await Promise.all([
+        axios.get("http://localhost:3001/products"),
+        axios.get("http://localhost:3001/accessories"),
+      ]);
 
-        setProducts(
-          Array.from(
-            new Map(productsRes.data.map((item) => [item.id, item])).values()
-          )
-        );
-        setAccessories(
-          Array.from(
-            new Map(accessoriesRes.data.map((item) => [item.id, item])).values()
-          )
-        );
-      } catch (error) {
-        toast.error("Failed to fetch data");
-      }
-    };
+      const uniqueProducts = Array.from(new Map(productsRes.data.map((item) => [item.id, item])).values());
+      const uniqueAccessories = Array.from(new Map(accessoriesRes.data.map((item) => [item.id, item])).values());
 
-    fetchData();
-  }, []);
+      setProducts(uniqueProducts);
+      setAccessories(uniqueAccessories);
+    } catch{
+      toast.error("Failed to fetch products/accessories");
+    }
+  };
+
+  fetchData();
+}, []);
+
 
   const filterProducts =
     category === "All"
