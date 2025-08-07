@@ -94,8 +94,7 @@ function Cart() {
                   <span className="fw-bold">{item.quantity}</span>
                   <button
                     className="btn btn-sm btn-outline-secondary"
-                    onClick={() => updateQuantity(index, 1)}
-                  >
+                    onClick={() => updateQuantity(index, 1)}>
                     +
                   </button>
                 </div>

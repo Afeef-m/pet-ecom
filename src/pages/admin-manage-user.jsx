@@ -12,8 +12,7 @@ function AdminManageUser() {
     const searchLower = search.toLowerCase();
     return users
       .filter((u) => (filter === "All" ? true : u.status === filter))
-      .filter(
-        (u) =>
+      .filter((u) =>
           u.name.toLowerCase().includes(searchLower) ||
           u.email.toLowerCase().includes(searchLower)
       );
@@ -69,16 +68,11 @@ function AdminManageUser() {
                     <tr key={user.id}>
                       <td>{user.name}</td>
                       <td>{user.email}</td>
-                      <td>
-                        <span
-                          className={`badge ${
+                      <td><span className={`badge ${
                             user.status === "active"
-                              ? "bg-success"
-                              : user.status === "blocked"
-                              ? "bg-danger"
-                              : "bg-secondary"
-                          }`}
-                        >
+                              ? "bg-success" : user.status === "blocked"
+                              ? "bg-danger" : "bg-secondary"
+                          }`}>
                           {user.status}
                         </span>
                       </td>

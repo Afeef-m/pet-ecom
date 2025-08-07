@@ -63,8 +63,8 @@ function Login() {
       } else {
         toast.error("Invalid! Please register.");
       }
-    } catch (err) {
-      toast.error("Something went wrong. Try again.");
+    } catch (error) {
+      toast.error("Something went wrong. Try again.",error);
     }
   };
 

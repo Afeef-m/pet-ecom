@@ -21,17 +21,14 @@ function AdminDashboard() {
     width: "100%",             
     borderRadius: "12px",
     backgroundColor: "#e6bc81c7",
-  }}
->
+  }}>
 
         <h2 className="text-center fw-bold mb-4">⚙️ Admin Dashboard</h2>
 
         <div className="row justify-content-center g-4">
           <div className="col-md-4">
             <div
-              className="card shadow-sm text-center p-4 border-0 h-100"
-              style={{ cursor: "pointer" }}
-            >
+              className="card shadow-sm text-center p-4 border-0 h-100">
               <FaBoxOpen size={50} className="text-primary mb-3  d-block mx-auto" />
               <h4 className="fw-semibold">Product Management</h4>
               <p className="text-muted">
@@ -39,8 +36,7 @@ function AdminDashboard() {
               </p>
               <button
                 className="btn btn-primary w-100"
-                onClick={() => navigate("/admin-manage-product")}
-              >
+                onClick={() => navigate("/admin-manage-product")}>
                 Manage Products
               </button>
             </div>
@@ -48,9 +44,7 @@ function AdminDashboard() {
 
           <div className="col-md-4">
             <div
-              className="card shadow-sm text-center p-4 border-0 h-100"
-              style={{ cursor: "pointer" }}
-            >
+              className="card shadow-sm text-center p-4 border-0 h-100">
              <FaUsersCog size={50} className="text-success mb-3 d-block mx-auto" />
               <h4 className="fw-semibold">User Management</h4>
               <p className="text-muted">
@@ -68,7 +62,6 @@ function AdminDashboard() {
           <div className="col-md-4">
             <div
               className="card shadow-sm text-center p-4 border-0 h-100"
-              style={{ cursor: "pointer" }}
             >
               <FaClipboardList size={50} className="text-warning mb-3  d-block mx-auto" />
               <h4 className="fw-semibold">Order Management</h4>
@@ -83,7 +76,6 @@ function AdminDashboard() {
           </div>
         </div>
 
-        {/* Logout */}
         <div className="text-center mt-4">
           <button
             className="btn btn-danger px-4 py-2 w-100"
