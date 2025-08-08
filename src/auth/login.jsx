@@ -34,7 +34,7 @@ function Login() {
 
     try {
       const res = await axios.get(
-        `https://your-service-name.up.railway.app/users?email=${email}&password=${password}&role=${role}`
+        `http://localhost:3001/users?email=${email}&password=${password}&role=${role}`
       );
       const user = res.data[0];
 

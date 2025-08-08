@@ -41,7 +41,7 @@ function Profile() {
     setLoading(true);
     try {
       const updatedUser = { ...user, name, email, password };
-      await axios.patch(`https://your-service-name.up.railway.app/users/${user.id}`, updatedUser);
+      await axios.patch(`http://localhost:3001/users/${user.id}`, updatedUser);
       setUser(updatedUser);
       localStorage.setItem("user", JSON.stringify(updatedUser));
       setEditMode(false);

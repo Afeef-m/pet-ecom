@@ -9,11 +9,11 @@ function useOrders() {
     const user = JSON.parse(localStorage.getItem("user"));
     if (!user || user.role !== "admin") return setLoading(false);
 
-    axios.get("https://your-service-name.up.railway.app/orders").then((orderRes) => {
+    axios.get("http://localhost:3001/orders").then((orderRes) => {
       Promise.all([
-        axios.get("https://your-service-name.up.railway.app/products"),
-        axios.get("https://your-service-name.up.railway.app/accessories"),
-        axios.get("https://your-service-name.up.railway.app/users"), 
+        axios.get("http://localhost:3001/products"),
+        axios.get("http://localhost:3001/accessories"),
+        axios.get("http://localhost:3001/users"), 
       ]).then(([prodRes, accRes, userRes]) => {
         const allItems = [...prodRes.data, ...accRes.data];
         const allUsers = userRes.data;
@@ -44,7 +44,7 @@ function useOrders() {
   }, []);
 
   const updateOrderStatus = (id, newStatus) => {
-    axios.patch(`https://your-service-name.up.railway.app/orders/${id}`, {
+    axios.patch(`http://localhost:3001/orders/${id}`, {
       status: newStatus,
     }).then(() => {
       setOrders((prev) =>

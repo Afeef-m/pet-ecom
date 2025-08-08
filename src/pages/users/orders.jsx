@@ -15,11 +15,11 @@ function Orders() {
       if (!user) return setLoading(false);
       try {
         const { data: orderData } = await axios.get(
-          `https://your-service-name.up.railway.app/orders?userId=${user.id}`
+          `http://localhost:3001/orders?userId=${user.id}`
         );
         const [productRes, accessoryRes] = await Promise.all([
-          axios.get("https://your-service-name.up.railway.app/products"),
-          axios.get("https://your-service-name.up.railway.app/accessories"),
+          axios.get("http://localhost:3001/products"),
+          axios.get("http://localhost:3001/accessories"),
         ]);
         const allItems = [...productRes.data, ...accessoryRes.data];
 
