@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { FaHeart } from "react-icons/fa";
 import { toast } from "react-toastify";
-
 
 function Wishlist() {
   const [wishlist, setWishlist] = useState([]);
@@ -21,8 +21,7 @@ function Wishlist() {
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
     const already = cart.find((p) => p.id === item.id);
     if (!already) {
-      cart.push({ ...item, quantity: 1,
-        weight: item.weight || "Unknown", });
+      cart.push({ ...item, quantity: 1, weight: item.weight || "Unknown" });
       localStorage.setItem("cart", JSON.stringify(cart));
       toast.success("Add to cart");
     } else {
@@ -32,54 +31,59 @@ function Wishlist() {
 
   return (
     <div className="container my-5">
-      <h2 className="mb-4">Your Wishlist</h2>
+      <h2 className="mb-4 fw-bold">
+        <FaHeart /> Your Wishlist
+      </h2>
+
       {wishlist.length === 0 ? (
         <div className="alert alert-warning text-center">
-          <p>Your wishlist is empty.</p>
-    </div>
+          Your wishlist is empty
+        </div>
       ) : (
-<div>
-  {wishlist.map((item, index) => (
-    <div key={index} className="card mb-3 shadow-sm">
-      <div className="row g-0 align-items-center">
-        <div className="col-md-2">
-          <img
-            src={item.image}
-            className="img-fluid rounded-start"
-            alt={item.name}
-          />
-        </div>
+        <>
+          {wishlist.map((item, index) => (
+            <div key={index} className="card mb-4 shadow-sm border-0">
+              <div className="row g-0 align-items-center">
+                {/* Image */}
+                <div className="col-md-2 text-center">
+                  <img
+                    src={item.image}
+                    className="img-fluid rounded-start p-2"
+                    alt={item.name}
+                    style={{ maxHeight: "100px" }}
+                  />
+                </div>
 
-        <div className="col-md-7">
-          <div className="card-body">
-            <h5 className="card-title">{item.name}</h5>
-            <p className="card-text">Price: ₹{item.price}</p>
-            <p className="card-text text-muted">
-              Weight: {item.weight || "Not specified"}
-            </p>
-            <div className="d-flex gap-2 mt-2">
-              <button
-                className="btn btn-sm btn-primary"
-                onClick={() => addToCart(item)}
-              >
-                Add to Cart
-              </button>
-              <button
-                className="btn btn-sm btn-danger"
-                onClick={() => removeFromWishlist(index)}
-              >
-                Remove
-              </button>
+                {/* Product Info */}
+                <div className="col-md-7">
+                  <div className="card-body">
+                    <h5 className="card-title mb-1">{item.name}</h5>
+                    <p className="mb-1">Price: ₹{item.price}</p>
+                    <p className="text-muted mb-2">
+                      Weight: {item.weight || "Not specified"}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Action Buttons Column */}
+                <div className="col-md-3 d-flex flex-column justify-content-center align-items-md-end align-items-center gap-2 pe-4">
+                  <button
+                    className="btn btn-sm btn-outline-primary"
+                    onClick={() => addToCart(item)}
+                  >
+                    Add to Cart
+                  </button>
+                  <button
+                    className="btn btn-sm btn-outline-danger"
+                    onClick={() => removeFromWishlist(index)}
+                  >
+                    Remove
+                  </button>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-
-        <div className="col-md-3 text-end pe-3 d-none d-md-block"></div>
-      </div>
-    </div>
-  ))}
-</div>
-
+          ))}
+        </>
       )}
     </div>
   );

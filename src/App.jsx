@@ -1,5 +1,5 @@
 import React from 'react';
-import Navbar from './components/navbar';
+import Navbar from './components/navbar/navbar';
 import { Routes, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
@@ -7,18 +7,21 @@ import AdminDashboard from './pages/admin/admin-dashboard';
 import AdminProduct from './pages/admin/admin-manage-product';
 import AdminManageUser from './pages/admin/admin-manage-user';
 import AdminOrders from './pages/admin/admin-orders';
+
 import ProtectedRoute from './components/ProtectedRoute';
+import PublicRoute from './components/publicRoute';
+
+import Register from "./auth/register"
+import Login from "./auth/login"
 
 import Home from './pages/users/home';
 import ProductDetails from './pages/users/productDetails';
-import Register from './pages/users/register';
-import Login from './pages/users/login';
-import Cart from './pages/users/cart';
+import Cart from "./pages/users/cart"
 import Wishlist from './pages/users/wishlist';
 import Checkout from './pages/users/checkout';
 import Orders from './pages/users/orders';
 import Payment from './pages/users/payment';
-import PublicRoute from './components/publicRoute';
+import Profile from './pages/users/profile';
 
 function App() {
   return (
@@ -44,6 +47,7 @@ function App() {
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/orders" element={<Orders />} />
         <Route path="/payment" element={<Payment />} />
+        <Route path='/profile' element={<Profile/>}/>
       </Route>
       
         {/* Admin Protected Routes */}

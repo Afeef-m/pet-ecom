@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { FaBoxOpen } from "react-icons/fa";
 import axios from "axios";
 
 function Orders() {
@@ -76,7 +77,7 @@ function Orders() {
 
   return (
     <div className="container my-5">
-      <h2 className="mb-4 text-center">My Orders</h2>
+      <h2 className="mb-4 text-center"><FaBoxOpen/> My Orders</h2>
 
       <div className="text-center my-4">
         <button className="btn btn-primary" onClick={() => navigate("/")}>

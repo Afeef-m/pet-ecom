@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { FaShoppingCart } from "react-icons/fa";
 
 function Cart() {
   const [cartItems, setCartItems] = useState([]);
@@ -56,7 +57,7 @@ function Cart() {
 
   return (
    <div className="container my-5">
-  <h2 className="mb-4 fw-bold">🛒 Your Cart</h2>
+  <h2 className="mb-4 fw-bold"><FaShoppingCart/> Your Cart</h2>
 
   {cartItems.length === 0 ? (
     <div className="alert alert-warning text-center">
@@ -66,51 +67,57 @@ function Cart() {
     <>
       {cartItems.map((item, index) => (
         <div key={index} className="card mb-4 shadow-sm border-0">
-          <div className="row g-0 align-items-center">
-            <div className="col-md-2 text-center">
-              <img
-                src={item.image}
-                className="img-fluid rounded-start p-2"
-                alt={item.name}
-                style={{ maxHeight: "100px" }}
-              />
-            </div>
+  <div className="row g-0 align-items-center">
+    {/* Image */}
+    <div className="col-md-2 text-center">
+      <img
+        src={item.image}
+        className="img-fluid rounded-start p-2"
+        alt={item.name}
+        style={{ maxHeight: "100px" }}
+      />
+    </div>
 
-            <div className="col-md-7">
-              <div className="card-body">
-                <h5 className="card-title mb-1">{item.name}</h5>
-                <p className="mb-1">Price: ₹{item.price}</p>
-                <p className="text-muted mb-2">
-                  Weight: {item.weight || "Unknown"}
-                </p>
+    {/* Product Info */}
+    <div className="col-md-7">
+      <div className="card-body">
+        <h5 className="card-title mb-1">{item.name}</h5>
+        <p className="mb-1">Price: ₹{item.price}</p>
+        <p className="text-muted mb-2">
+          Weight: {item.weight || "Unknown"}
+        </p>
 
-                <div className="d-flex align-items-center gap-2">
-                  <button
-                    className="btn btn-sm btn-outline-secondary"
-                    onClick={() => updateQuantity(index, -1)}
-                  >
-                    −
-                  </button>
-                  <span className="fw-bold">{item.quantity}</span>
-                  <button
-                    className="btn btn-sm btn-outline-secondary"
-                    onClick={() => updateQuantity(index, 1)}>
-                    +
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <div className="col-md-3 text-end pe-4">
-              <button
-                className="btn btn-sm btn-outline-danger"
-                onClick={() => removeFromCart(index)}
-              >
-                 Remove
-              </button>
-            </div>
-          </div>
+        {/* Quantity Controls */}
+        <div className="d-flex align-items-center gap-2">
+          <button
+            className="btn btn-sm btn-outline-secondary"
+            onClick={() => updateQuantity(index, -1)}
+          >
+            −
+          </button>
+          <span className="fw-bold">{item.quantity}</span>
+          <button
+            className="btn btn-sm btn-outline-secondary"
+            onClick={() => updateQuantity(index, 1)}
+          >
+            +
+          </button>
         </div>
+      </div>
+    </div>
+
+    {/* Remove Button - Center aligned vertically */}
+    <div className="col-md-3 d-flex justify-content-md-end justify-content-center align-items-center pe-4">
+      <button
+        className="btn btn-sm btn-outline-danger"
+        onClick={() => removeFromCart(index)}
+      >
+        Remove
+      </button>
+    </div>
+  </div>
+</div>
+
       ))}
 
       <div className="text-end">

@@ -110,7 +110,7 @@ function Home() {
             type="text"
             className="form-control"
             placeholder="Search pet food..."
-            style={{ maxWidth: "300px" }}
+            style={{ maxWidth: "300px",borderRadius:"15px" }}
             value={searchFood}
             onChange={(e) => setSearchFood(e.target.value)}
           />
@@ -147,6 +147,7 @@ function Home() {
                         alt={item.name}
                         className="product-image mb-3"
                       />
+                      <hr />
                       <h6 className="product-title">{item.name}</h6>
                       <p className="product-price">₹{item.price}</p>
                     </Link>
@@ -174,7 +175,7 @@ function Home() {
             type="text"
             className="form-control"
             placeholder="Search accessories..."
-            style={{ maxWidth: "300px" }}
+            style={{ maxWidth: "300px",borderRadius:"15px" }}
             value={searchAcc}
             onChange={(e) => setSearchAcc(e.target.value)}
           />
@@ -211,6 +212,7 @@ function Home() {
                         alt={item.name}
                         className="product-image mb-3"
                       />
+                      <hr />
                       <h6 className="product-title">{item.name}</h6>
                       <p className="product-price">₹{item.price}</p>
                     </Link>
