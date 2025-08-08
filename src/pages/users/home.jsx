@@ -19,8 +19,8 @@ function Home() {
   const fetchData = async () => {
     try {
       const [productsRes, accessoriesRes] = await Promise.all([
-        axios.get("http://localhost:3001/products"),
-        axios.get("http://localhost:3001/accessories"),
+        axios.get("https://your-service-name.up.railway.app/products"),
+        axios.get("https://your-service-name.up.railway.app/accessories"),
       ]);
 
       const uniqueProducts = Array.from(new Map(productsRes.data.map((item) => [item.id, item])).values());

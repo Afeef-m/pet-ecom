@@ -14,13 +14,13 @@ function ProductDetails() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3001/products/${id}`)
+      .get(`https://your-service-name.up.railway.app/products/${id}`)
       .then((res) => {
         setProduct(res.data);
       })
       .catch(() => {
         axios
-          .get(`http://localhost:3001/accessories/${id}`)
+          .get(`https://your-service-name.up.railway.app/accessories/${id}`)
           .then((res) => setProduct(res.data))
           .catch(() => setProduct(null));
       });

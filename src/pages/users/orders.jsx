@@ -15,11 +15,11 @@ function Orders() {
       if (!user) return setLoading(false);
       try {
         const { data: orderData } = await axios.get(
-          `http://localhost:3001/orders?userId=${user.id}`
+          `https://your-service-name.up.railway.app/orders?userId=${user.id}`
         );
         const [productRes, accessoryRes] = await Promise.all([
-          axios.get("http://localhost:3001/products"),
-          axios.get("http://localhost:3001/accessories"),
+          axios.get("https://your-service-name.up.railway.app/products"),
+          axios.get("https://your-service-name.up.railway.app/accessories"),
         ]);
         const allItems = [...productRes.data, ...accessoryRes.data];
 
@@ -52,7 +52,8 @@ function Orders() {
     );
     if (!confirmCancel) return;
     try {
-      const res = await axios.patch(`http://localhost:3001/orders/${orderId}`, {
+      const res = await 
+      axios.patch(`https://your-service-name.up.railway.app/orders/${orderId}`, {
         status: "Cancelled",
       });
 

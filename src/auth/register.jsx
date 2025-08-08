@@ -36,7 +36,7 @@ function Register() {
   }
 
   try {
-    await axios.post("http://localhost:3001/users", user);
+    await axios.post("https://your-service-name.up.railway.app/users", user);
     toast.success("Registered successfully!");
     navigate("/login");
   } catch (err) {
