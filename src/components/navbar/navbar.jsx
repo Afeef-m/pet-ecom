@@ -120,7 +120,7 @@ function Navbar() {
                   onClick={collapseNavbar}
                   title="Login"
                 >
-                  <FaSignInAlt size={25}/>
+                  <FaSignInAlt size={20}/>
                 </Link>
                 <Link
                   to="/register"
@@ -128,7 +128,7 @@ function Navbar() {
                   onClick={collapseNavbar}
                   title="Register"
                 >
-                  <FaUserPlus size={25}/>
+                  <FaUserPlus size={20}/>
                 </Link>
               </>
             )}
