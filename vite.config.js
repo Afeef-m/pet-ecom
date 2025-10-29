@@ -2,14 +2,13 @@ import { defineConfig } from 'vite'
 
 export default defineConfig({
   preview: {
-    allowedHosts: [
-      'pet-ecom-qt9a.onrender.com',
-    ]
+    host: '0.0.0.0',
+    port: process.env.PORT || 4173,
+    allowedHosts: 'all'
   },
   server: {
-    host: true, 
-    allowedHosts: [
-      'pet-ecom-qt9a.onrender.com'
-    ]
+    host: '0.0.0.0',
+    port: process.env.PORT || 5173,
+    allowedHosts: 'all'
   }
 })

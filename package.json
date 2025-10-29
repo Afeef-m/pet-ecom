@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview",
-    "start": "vite preview --port $PORT --host 0.0.0.0"
+    "preview": "vite preview --host --port $PORT",
+    "start": "vite preview --host --port $PORT"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",

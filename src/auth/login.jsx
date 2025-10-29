@@ -57,7 +57,7 @@ function Login() {
           } else if (user.role === "admin") {
             navigate("/admin-dashboard", { replace: true });
           } else {
-            navigate("/", { replace: true });
+            navigate("", { replace: true });
           }
         }, 1000);
       } else {

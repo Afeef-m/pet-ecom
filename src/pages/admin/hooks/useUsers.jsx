@@ -8,7 +8,8 @@ function useUsers() {
   useEffect(() => {
     axios.get(`http://localhost:3001/users`)
     .then((res) => {
-      const userList = res.data.filter((u) => u.role === "user");
+      const userList = res.data
+      .filter((u) => u.role === "user");
       setUsers(userList);
     });
 
