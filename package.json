@@ -1,20 +1,19 @@
 {
-  "name": "pet-ecom",
+  "name": "pet-ecom-frontend",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview --host --port $PORT",
-    "start": "vite preview --host --port $PORT"
+    "preview": "vite preview",
+    "start": "vite"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",
     "@popperjs/core": "^2.11.8",
     "axios": "^1.10.0",
     "bootstrap": "^5.3.7",
-    "json-server": "0.17.4",
     "react": "^19.1.0",
     "react-bootstrap": "^2.10.10",
     "react-dom": "^19.1.0",
