@@ -36,7 +36,7 @@ function Register() {
   }
 
   try {
-    await axios.post("http://localhost:3001p/users", user);
+    await axios.post("https://pet-json.onrender.com/users", user);
     toast.success("Registered successfully!");
     navigate("/login");
   } catch (err) {

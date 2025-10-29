@@ -8,8 +8,8 @@ function useProduct() {
 
   useEffect(() => {
     Promise.all([
-      axios.get("http://localhost:3001/products"),
-      axios.get("http://localhost:3001/accessories"),
+      axios.get("https://pet-json.onrender.com/products"),
+      axios.get("https://pet-json.onrender.com/accessories"),
     ]).then(([productRes, accessoryRes]) => {
       setProducts(productRes.data);
       setAccessories(accessoryRes.data);
@@ -18,7 +18,7 @@ function useProduct() {
   }, []);
 
   const addProduct = (newData, type) => {
-    axios.post(`http://localhost:3001/${type}`, newData).then((res) => {
+    axios.post(`https://pet-json.onrender.com/${type}`, newData).then((res) => {
       type === "products"
         ? setProducts((prev) => [...prev, res.data])
         : setAccessories((prev) => [...prev, res.data]);
@@ -26,7 +26,7 @@ function useProduct() {
   };
 
   const updateProduct = (id, updatedData, type) => {
-    axios.patch(`http://localhost:3001/${type}/${id}`, updatedData)
+    axios.patch(`https://pet-json.onrender.com/${type}/${id}`, updatedData)
     .then((res) => {
       type === "products"
         ? setProducts((prev) => prev.map((p) => (p.id === id ? res.data : p)))
@@ -35,7 +35,7 @@ function useProduct() {
   };
 
   const activateProduct = (type, id) => {
-    axios.patch(`http://localhost:3001/${type}/${id}`, { status: "active" })
+    axios.patch(`https://pet-json.onrender.com/${type}/${id}`, { status: "active" })
     .then((res) => {
       type === "products"
         ? setProducts((prev) => prev.map((p) => (p.id === id ? res.data : p)))
@@ -44,7 +44,7 @@ function useProduct() {
   };
 
   const deleteProduct = (type, id) => {
-    axios.patch(`http://localhost:3001/${type}/${id}`, { status: "inactive" })
+    axios.patch(`https://pet-json.onrender.com/${type}/${id}`, { status: "inactive" })
     .then((res) => {
       type === "products"
         ? setProducts((prev) => prev.map((p) => (p.id === id ? res.data : p)))

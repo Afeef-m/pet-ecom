@@ -34,7 +34,7 @@ function Login() {
 
     try {
       const res = await axios.get(
-        `http://localhost:3001/users?email=${email}&password=${password}&role=${role}`
+        `https://pet-json.onrender.com/users?email=${email}&password=${password}&role=${role}`
       );
       const user = res.data[0];
 

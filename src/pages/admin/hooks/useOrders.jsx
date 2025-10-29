@@ -9,11 +9,11 @@ function useOrders() {
     const user = JSON.parse(localStorage.getItem("user"));
     if (!user || user.role !== "admin") return setLoading(false);
 
-    axios.get("http://localhost:3001/orders").then((orderRes) => {
+    axios.get("https://pet-json.onrender.com/orders").then((orderRes) => {
       Promise.all([
-        axios.get("http://localhost:3001/products"),
-        axios.get("http://localhost:3001/accessories"),
-        axios.get("http://localhost:3001/users"), 
+        axios.get("https://pet-json.onrender.com/products"),
+        axios.get("https://pet-json.onrender.com/accessories"),
+        axios.get("https://pet-json.onrender.com/users"), 
       ]).then(([prodRes, accRes, userRes]) => {
         const allItems = [...prodRes.data, ...accRes.data];
         const allUsers = userRes.data;
@@ -44,7 +44,7 @@ function useOrders() {
   }, []);
 
   const updateOrderStatus = (id, newStatus) => {
-    axios.patch(`http://localhost:3001/orders/${id}`, {
+    axios.patch(`https://pet-json.onrender.com/orders/${id}`, {
       status: newStatus,
     }).then(() => {
       setOrders((prev) =>

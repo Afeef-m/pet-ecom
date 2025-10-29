@@ -29,7 +29,7 @@ function App() {
       <Navbar />
       <ToastContainer position="top-center" autoClose={1000} />
       <Routes>
-        {/* Public Routes */}
+        
         <Route path="/" element={<Home />} />
 
         <Route element={<PublicRoute/>}>
@@ -40,7 +40,7 @@ function App() {
         <Route path="/product/:id" element={<ProductDetails />} />
         <Route path="/accessory/:id" element={<ProductDetails />} />
 
-        {/* User Protected Routes */}
+       
       <Route element={<ProtectedRoute role="user"/>}>
         <Route path="/cart" element={<Cart />} />
         <Route path="/wishlist" element={<Wishlist />} />
@@ -50,7 +50,7 @@ function App() {
         <Route path='/profile' element={<Profile/>}/>
       </Route>
       
-        {/* Admin Protected Routes */}
+       
        <Route element={<ProtectedRoute role="admin"/>}>
          <Route path='/admin-dashboard' element={<AdminDashboard/>} />
         <Route path='/admin-manage-product' element={<AdminProduct/>} />

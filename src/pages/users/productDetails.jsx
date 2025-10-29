@@ -14,13 +14,13 @@ function ProductDetails() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3001/products/${id}`)
+      .get(`https://pet-json.onrender.com/products/${id}`)
       .then((res) => {
         setProduct(res.data);
       })
       .catch(() => {
         axios
-          .get(`http://localhost:3001/accessories/${id}`)
+          .get(`https://pet-json.onrender.com/accessories/${id}`)
           .then((res) => setProduct(res.data))
           .catch(() => setProduct(null));
       });

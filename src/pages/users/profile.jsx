@@ -41,7 +41,7 @@ function Profile() {
     setLoading(true);
     try {
       const updatedUser = { ...user, name, email, password };
-      await axios.patch(`http://localhost:3001/users/${user.id}`, updatedUser);
+      await axios.patch(`https://pet-json.onrender.com/users/${user.id}`, updatedUser);
       setUser(updatedUser);
       localStorage.setItem("user", JSON.stringify(updatedUser));
       setEditMode(false);

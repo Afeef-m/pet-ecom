@@ -44,7 +44,7 @@ function Wishlist() {
           {wishlist.map((item, index) => (
             <div key={index} className="card mb-4 shadow-sm border-0">
               <div className="row g-0 align-items-center">
-                {/* Image */}
+               
                 <div className="col-md-2 text-center">
                   <img
                     src={item.image}
@@ -54,7 +54,7 @@ function Wishlist() {
                   />
                 </div>
 
-                {/* Product Info */}
+                
                 <div className="col-md-7">
                   <div className="card-body">
                     <h5 className="card-title mb-1">{item.name}</h5>
@@ -65,7 +65,7 @@ function Wishlist() {
                   </div>
                 </div>
 
-                {/* Action Buttons Column */}
+               
                 <div className="col-md-3 d-flex flex-column justify-content-center align-items-md-end align-items-center gap-2 pe-4">
                   <button
                     className="btn btn-sm btn-outline-primary"

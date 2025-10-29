@@ -15,11 +15,11 @@ function Orders() {
       if (!user) return setLoading(false);
       try {
         const { data: orderData } = await axios.get(
-          `http://localhost:3001/orders?userId=${user.id}`
+          `https://pet-json.onrender.com/orders?userId=${user.id}`
         );
         const [productRes, accessoryRes] = await Promise.all([
-          axios.get("http://localhost:3001/products"),
-          axios.get("http://localhost:3001/accessories"),
+          axios.get("https://pet-json.onrender.com/products"),
+          axios.get("https://pet-json.onrender.com/accessories"),
         ]);
         const allItems = [...productRes.data, ...accessoryRes.data];
 
