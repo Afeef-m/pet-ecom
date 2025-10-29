@@ -1,3 +1,4 @@
+import React from "react";
 import { useRef, useEffect, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { FaHome, FaShoppingCart, FaHeart, FaBoxOpen, FaUser, FaSignInAlt, FaUserPlus, FaSignOutAlt } from "react-icons/fa";
@@ -9,6 +10,11 @@ function Navbar() {
   const location = useLocation();
   const navbar = useRef(null);
 
+    useEffect(() => {
+    const user = localStorage.getItem("user");
+    setLoggedIn(!!user);
+  }, [location]);
+  
   const isAdminRoute = [
     "/admin-dashboard",
     "/admin-manage-user",
@@ -20,10 +26,7 @@ function Navbar() {
     return null;
   }
 
-  useEffect(() => {
-    const user = localStorage.getItem("user");
-    setLoggedIn(!!user);
-  }, [location]);
+
 
   const handleLogout = () => {
     localStorage.removeItem("user");
