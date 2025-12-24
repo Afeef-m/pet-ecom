@@ -14,13 +14,13 @@ function ProductDetails() {
 
   useEffect(() => {
     axios
-      .get(`https://pet-json.onrender.com/products/${id}`)
+      .get(`http://localhost:3001/products/${id}`)
       .then((res) => {
         setProduct(res.data);
       })
       .catch(() => {
         axios
-          .get(`https://pet-json.onrender.com/accessories/${id}`)
+          .get(`http://localhost:3001/accessories/${id}`)
           .then((res) => setProduct(res.data))
           .catch(() => setProduct(null));
       });
@@ -154,9 +154,8 @@ function ProductDetails() {
             </button>
 
             <button
-              className={`btn ${
-                inWishlist ? "btn-danger text-white" : "btn-outline-danger"
-              }`}
+              className={`btn ${inWishlist ? "btn-danger text-white" : "btn-outline-danger"
+                }`}
               onClick={handleWishlist}
             >
               {inWishlist ? "♥" : "♡"}

@@ -42,7 +42,7 @@ function Payment() {
     };
 
     try {
-      const response = await fetch("https://pet-json.onrender.com/orders", {
+      const response = await fetch("http://localhost:3001/orders", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newOrder),
@@ -93,7 +93,7 @@ function Payment() {
                 name="payment"
                 className="form-check-input"
                 value="UPI"
-                onChange={(e) => setPaymentMethod(e.target.value)}/>
+                onChange={(e) => setPaymentMethod(e.target.value)} />
               <label htmlFor="upi" className="form-check-label">
                 UPI
               </label>
@@ -105,7 +105,7 @@ function Payment() {
                 name="payment"
                 className="form-check-input"
                 value="Card"
-                onChange={(e) => setPaymentMethod(e.target.value)}/>
+                onChange={(e) => setPaymentMethod(e.target.value)} />
               <label htmlFor="card" className="form-check-label">
                 Card
               </label>
@@ -117,7 +117,7 @@ function Payment() {
                 name="payment"
                 className="form-check-input"
                 value="Cash on Delivery"
-                onChange={(e) => setPaymentMethod(e.target.value)}/>
+                onChange={(e) => setPaymentMethod(e.target.value)} />
 
               <label htmlFor="cod" className="form-check-label">
                 Cash on Delivery

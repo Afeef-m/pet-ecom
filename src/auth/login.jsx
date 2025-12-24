@@ -34,7 +34,7 @@ function Login() {
 
     try {
       const res = await axios.get(
-        `https://pet-json.onrender.com/users?email=${email}&password=${password}&role=${role}`
+        `http://localhost:3001/users?email=${email}&password=${password}&role=${role}`
       );
       const user = res.data[0];
 
@@ -53,7 +53,7 @@ function Login() {
 
         setTimeout(() => {
           if (location.state?.from) {
-            navigate(location.state.from.pathname); 
+            navigate(location.state.from.pathname);
           } else if (user.role === "admin") {
             navigate("/admin-dashboard", { replace: true });
           } else {
@@ -64,7 +64,7 @@ function Login() {
         toast.error("Invalid! Please register.");
       }
     } catch (error) {
-      toast.error("Something went wrong. Try again.",error);
+      toast.error("Something went wrong. Try again.", error);
     }
   };
 
@@ -110,7 +110,7 @@ function Login() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               autoComplete="off"
-              required/>
+              required />
           </div>
           <div className="mb-3">
             <label className="form-label fw-semibold">Password</label>
@@ -121,7 +121,7 @@ function Login() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               autoComplete="new-password"
-              required/>
+              required />
           </div>
 
           <button

@@ -16,25 +16,25 @@ function Home() {
   const [sortOrderAcc, setSortOrderAcc] = useState("none");
 
   useEffect(() => {
-  const fetchData = async () => {
-    try {
-      const [productsRes, accessoriesRes] = await Promise.all([
-        axios.get("https://pet-json.onrender.com/products"),
-        axios.get("https://pet-json.onrender.com/accessories"),
-      ]);
+    const fetchData = async () => {
+      try {
+        const [productsRes, accessoriesRes] = await Promise.all([
+          axios.get("http://localhost:3001/products"),
+          axios.get("http://localhost:3001/accessories"),
+        ]);
 
-      const uniqueProducts = Array.from(new Map(productsRes.data.map((item) => [item.id, item])).values());
-      const uniqueAccessories = Array.from(new Map(accessoriesRes.data.map((item) => [item.id, item])).values());
+        const uniqueProducts = Array.from(new Map(productsRes.data.map((item) => [item.id, item])).values());
+        const uniqueAccessories = Array.from(new Map(accessoriesRes.data.map((item) => [item.id, item])).values());
 
-      setProducts(uniqueProducts);
-      setAccessories(uniqueAccessories);
-    } catch{
-      toast.error("Failed to fetch products/accessories");
-    }
-  };
+        setProducts(uniqueProducts);
+        setAccessories(uniqueAccessories);
+      } catch {
+        toast.error("Failed to fetch products/accessories");
+      }
+    };
 
-  fetchData();
-}, []);
+    fetchData();
+  }, []);
 
 
   const filterProducts =
@@ -110,7 +110,7 @@ function Home() {
             type="text"
             className="form-control"
             placeholder="Search pet food..."
-            style={{ maxWidth: "300px",borderRadius:"15px" }}
+            style={{ maxWidth: "300px", borderRadius: "15px" }}
             value={searchFood}
             onChange={(e) => setSearchFood(e.target.value)}
           />
@@ -175,7 +175,7 @@ function Home() {
             type="text"
             className="form-control"
             placeholder="Search accessories..."
-            style={{ maxWidth: "300px",borderRadius:"15px" }}
+            style={{ maxWidth: "300px", borderRadius: "15px" }}
             value={searchAcc}
             onChange={(e) => setSearchAcc(e.target.value)}
           />

@@ -15,11 +15,11 @@ function Orders() {
       if (!user) return setLoading(false);
       try {
         const { data: orderData } = await axios.get(
-          `https://pet-json.onrender.com/orders?userId=${user.id}`
+          `http://localhost:3001/orders?userId=${user.id}`
         );
         const [productRes, accessoryRes] = await Promise.all([
-          axios.get("https://pet-json.onrender.com/products"),
-          axios.get("https://pet-json.onrender.com/accessories"),
+          axios.get("http://localhost:3001/products"),
+          axios.get("http://localhost:3001/accessories"),
         ]);
         const allItems = [...productRes.data, ...accessoryRes.data];
 
@@ -52,10 +52,10 @@ function Orders() {
     );
     if (!confirmCancel) return;
     try {
-      const res = await 
-      axios.patch(`https://your-service-name.up.railway.app/orders/${orderId}`, {
-        status: "Cancelled",
-      });
+      const res = await
+        axios.patch(`https://your-service-name.up.railway.app/orders/${orderId}`, {
+          status: "Cancelled",
+        });
 
       if (res.status === 200) {
         toast.success("Order cancelled successfully");
@@ -78,7 +78,7 @@ function Orders() {
 
   return (
     <div className="container my-5">
-      <h2 className="mb-4 text-center"><FaBoxOpen/> My Orders</h2>
+      <h2 className="mb-4 text-center"><FaBoxOpen /> My Orders</h2>
 
       <div className="text-center my-4">
         <button className="btn btn-primary" onClick={() => navigate("/")}>
@@ -111,13 +111,12 @@ function Orders() {
                   <p>
                     <strong>Status:</strong>{" "}
                     <span
-                      className={`badge ${
-                        order.status === "Delivered"
+                      className={`badge ${order.status === "Delivered"
                           ? "bg-success"
                           : order.status === "Cancelled"
-                          ? "bg-danger"
-                          : "bg-warning text-dark"
-                      }`}>
+                            ? "bg-danger"
+                            : "bg-warning text-dark"
+                        }`}>
                       {order.status || "Pending"}
                     </span>
                   </p>

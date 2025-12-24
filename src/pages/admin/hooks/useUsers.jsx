@@ -6,26 +6,26 @@ function useUsers() {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
-    axios.get(`https://pet-json.onrender.com/users`)
-    .then((res) => {
-      const userList = res.data
-      .filter((u) => u.role === "user");
-      setUsers(userList);
-    });
+    axios.get(`http://localhost:3001/users`)
+      .then((res) => {
+        const userList = res.data
+          .filter((u) => u.role === "user");
+        setUsers(userList);
+      });
 
-    axios.get(`https://pet-json.onrender.com/orders`)
-    .then((res) => {
-      setOrders(res.data);
-    });
+    axios.get(`http://localhost:3001/orders`)
+      .then((res) => {
+        setOrders(res.data);
+      });
   }, []);
 
   const updateUserStatus = (id, status) => {
-    axios.patch(`https://pet-json.onrender.com/users/${id}`, { status })
-    .then(() => {
-      setUsers((prev) =>
-        prev.map((u) => (u.id === id ? { ...u, status } : u))
-      );
-    });
+    axios.patch(`http://localhost:3001/users/${id}`, { status })
+      .then(() => {
+        setUsers((prev) =>
+          prev.map((u) => (u.id === id ? { ...u, status } : u))
+        );
+      });
   };
 
   const blockUser = (id) => updateUserStatus(id, "blocked");
