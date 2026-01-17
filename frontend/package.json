@@ -1,0 +1,41 @@
+{
+  "name": "pet-ecom-frontend",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "start": "vite"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^5.2.1",
+    "@popperjs/core": "^2.11.8",
+    "axios": "^1.10.0",
+    "bootstrap": "^5.3.7",
+    "react": "^19.1.0",
+    "react-bootstrap": "^2.10.10",
+    "react-dom": "^19.1.0",
+    "react-hook-form": "^7.61.1",
+    "react-icons": "^5.5.0",
+    "react-router-dom": "^7.7.0",
+    "react-toastify": "^11.0.5"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.30.1",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "@vitejs/plugin-react": "^4.6.0",
+    "autoprefixer": "^10.4.21",
+    "eslint": "^9.30.1",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.20",
+    "globals": "^16.3.0",
+    "postcss": "^8.5.6",
+    "vite": "^7.0.4"
+  },
+  "resolutions": {
+    "rollup": "3.29.4"
+  }
+}
