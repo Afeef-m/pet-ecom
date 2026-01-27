@@ -1,72 +1,58 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import axios from "axios";
 import { toast } from "react-toastify";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { SlArrowRightCircle } from "react-icons/sl";
+import { api } from "../api";
 
-function Login() {
+export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("user");
 
   const navigate = useNavigate();
   const location = useLocation();
 
+  
   useEffect(() => {
     setEmail("");
     setPassword("");
-    setRole("user");
+    }, []);
+    
+   const handleLogin = async (e) => {
+  e.preventDefault();
 
-    window.history.pushState(null, "", window.location.href);
-    window.onpopstate = () => {
-      window.history.go(1);
-    };
-  }, []);
+  if (!email.includes("@gmail.com") || password.length < 4) {
+    toast.error("Enter valid email and password (min 4 characters)");
+    return;
+  }
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
+  try {
+    const res = await api.post("/auth/login", {
+      email,
+      password,
+    });
 
-    if (!email.includes("@gmail.com") || password.length < 4) {
-      toast.error("Enter valid email and password with at least 4 characters");
-      return;
-    }
+    const { token, user } = res.data;
 
-    try {
-      const res = await axios.get(
-        `http://localhost:3001/users?email=${email}&password=${password}&role=${role}`
-      );
-      const user = res.data[0];
+    localStorage.setItem("token", token);
+    localStorage.setItem("user", JSON.stringify(user));
 
-      if (user) {
-        if (user.status === "blocked") {
-          toast.error("Your account is blocked. Contact admin.");
-          return;
-        }
-        if (user.status === "inactive") {
-          toast.error("Your account is deleted.");
-          return;
-        }
+    toast.success(`Welcome ${user.name}!`);
 
-        localStorage.setItem("user", JSON.stringify(user));
-        toast.success(`Welcome ${user.name}!`);
-
-        setTimeout(() => {
-          if (location.state?.from) {
-            navigate(location.state.from.pathname);
-          } else if (user.role === "admin") {
-            navigate("/admin-dashboard", { replace: true });
-          } else {
-            navigate("", { replace: true });
-          }
-        }, 1000);
+    setTimeout(() => {
+      if (location.state?.from) {
+        navigate(location.state.from.pathname, { replace: true });
+      } else if (user.role === "admin") {
+        navigate("/admin-dashboard", { replace: true });
       } else {
-        toast.error("Invalid! Please register.");
+        navigate("/", { replace: true });
       }
-    } catch (error) {
-      toast.error("Something went wrong. Try again.", error);
-    }
-  };
+    }, 800);
+
+  } catch (error) {
+    toast.error(error.response?.data?.message || "Login failed");
+  }
+};
 
   return (
     <div
@@ -90,17 +76,6 @@ function Login() {
         <h2 className="text-center mb-4 text-primary fw-bold">Login Here</h2>
 
         <form onSubmit={handleLogin} autoComplete="off">
-          <div className="mb-3">
-            <label className="form-label fw-semibold">Login as</label>
-            <select
-              className="form-select"
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
-            >
-              <option value="user">User</option>
-              <option value="admin">Admin</option>
-            </select>
-          </div>
           <div className="mb-3">
             <label className="form-label fw-semibold">Email</label>
             <input
@@ -149,4 +124,4 @@ function Login() {
   );
 }
 
-export default Login;
+

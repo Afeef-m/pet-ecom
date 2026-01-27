@@ -1,29 +1,29 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import { api } from "../../../api";
 
 function useUsers() {
   const [users, setUsers] = useState([]);
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
-    axios.get(`http://localhost:3001/users`)
+    api.get(`/users`)
       .then((res) => {
         const userList = res.data
           .filter((u) => u.role === "user");
         setUsers(userList);
       });
 
-    axios.get(`http://localhost:3001/orders`)
+    api.get(`/orders`)
       .then((res) => {
         setOrders(res.data);
       });
   }, []);
 
   const updateUserStatus = (id, status) => {
-    axios.patch(`http://localhost:3001/users/${id}`, { status })
+    api.patch(`/users/${id}`, { status })
       .then(() => {
         setUsers((prev) =>
-          prev.map((u) => (u.id === id ? { ...u, status } : u))
+          prev.map((u) => (u._id === id ? { ...u, status } : u))
         );
       });
   };

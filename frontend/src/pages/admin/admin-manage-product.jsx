@@ -5,17 +5,16 @@ import { toast } from "react-toastify";
 function AdminProduct() {
   const {
     products,
-    accessories,
     loading,
     addProduct,
     updateProduct,
-    activateProduct,
-    deleteProduct,
+    updateStatus
   } = useProduct();
 
   const [form, setForm] = useState({
     name: "",
     category: "",
+    type:"",
     price: "",
     weight: "",
     image: "",
@@ -23,7 +22,7 @@ function AdminProduct() {
     status: "active",
   });
   const [filter, setFilter] = useState("All");
-  const [edit, setEdit] = useState(null);
+  const [editId, setEditId] = useState(null);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -33,28 +32,26 @@ function AdminProduct() {
     setForm({
       name: "",
       category: "",
+      type:"",
       price: "",
       weight: "",
       image: "",
       description: "",
       status: "active",
     });
-    setEdit(null);
+    setEditId(null);
   };
 
   const handleAddOrUpdate = () => {
-    if (!form.name || !form.price || !form.image || !form.category) {
+    if (!form.name || !form.price || !form.image || !form.category || !form.type) {
       toast.error("Please fill all required fields");
       return;
     }
 
-    const selectedType =
-      form.category === "Accessories" ? "accessories" : "products";
-
-    if (edit) {
-      updateProduct(edit, form, selectedType);
+    if (editId) {
+      updateProduct(editId, form);
     } else {
-      addProduct(form, selectedType);
+      addProduct(form);
     }
 
     resetForm();
@@ -64,30 +61,20 @@ function AdminProduct() {
     setForm({
       name: item.name,
       category: item.category,
+      type:item.type,
       price: item.price,
-      weight: item.weight,
+      weight: item.weight || "",
       image: item.image,
-      description: item.description,
+      description: item.description || "",
       status: item.status,
     });
-    setEdit(item.id);
+    setEditId(item._id);
   };
-
-  const handleDelete = (id, type) => {
-    if (window.confirm("Are you sure you want to delete this product?")) {
-      deleteProduct(type, id);
-    }
-  };
-
-  const allProducts = [
-    ...products.map((p) => ({ ...p, type: "products" })),
-    ...accessories.map((a) => ({ ...a, type: "accessories" })),
-  ];
 
   const filteredProducts =
     filter === "All"
-      ? allProducts
-      : allProducts.filter((item) => item.category === filter);
+      ? products
+      : products.filter((item) => item.category === filter);
 
   if (loading) return <p className="text-center mt-5">Loading...</p>;
 
@@ -100,7 +87,7 @@ function AdminProduct() {
     <h2 className="text-center mb-4">Admin Product Management</h2>
 
     <div className="card p-3 mb-4 shadow-sm">
-      <h4>{edit ? "Edit Product" : "Add New Product"}</h4>
+      <h4>{editId ? "Edit Product" : "Add New Product"}</h4>
       <div className="row g-3">
         <div className="col-12 col-md-4">
           <input
@@ -125,6 +112,20 @@ function AdminProduct() {
             <option value="Accessories">Accessories</option>
           </select>
         </div>
+
+        <div className="col-md-3">
+            <select
+              name="type"
+              value={form.type}
+              onChange={handleChange}
+              className="form-select"
+            >
+              <option value="">Type</option>
+              <option value="food">Food</option>
+              <option value="accessories">Accessories</option>
+            </select>
+          </div>
+
         <div className="col-12 col-md-2">
           <input
             type="number"
@@ -166,9 +167,9 @@ function AdminProduct() {
         </div>
         <div className="col-12 text-end">
           <button className="btn btn-success me-2" onClick={handleAddOrUpdate}>
-            {edit ? "Update" : "Add"} Product
+            {editId ? "Update" : "Add"} Product
           </button>
-          {edit && (
+          {editId && (
             <button className="btn btn-secondary" onClick={resetForm}>
               Cancel
             </button>
@@ -205,9 +206,11 @@ function AdminProduct() {
           </tr>
         </thead>
         <tbody>
-          {filteredProducts.length > 0 ? (
-            filteredProducts.map((item) => (
-              <tr key={item.id}>
+           {filteredProducts?.filter(item => item && item._id).length > 0 ? (
+    filteredProducts
+      .filter(item => item && item._id)
+      .map((item) => (
+              <tr key={item._id}>
                 <td>
                   <img
                     src={item.image}
@@ -238,21 +241,17 @@ function AdminProduct() {
                   >
                     Edit
                   </button>
-                  {item.status === "inactive" ? (
-                    <button
-                      className="btn btn-sm btn-success"
-                      onClick={() => activateProduct(item.type, item.id)}
-                    >
-                      Activate
-                    </button>
-                  ) : (
-                    <button
-                      className="btn btn-sm btn-danger"
-                      onClick={() => handleDelete(item.id, item.type)}
-                    >
-                      Delete
-                    </button>
-                  )}
+                   <button
+                  className="btn btn-sm btn-danger"
+                  onClick={() =>
+                    updateStatus(
+                      item._id,
+                      item.status === "active" ? "inactive" : "active"
+                    )
+                  }
+                >
+                  {item.status === "active" ? "Deactivate" : "Activate"}
+                </button>
                 </td>
               </tr>
             ))

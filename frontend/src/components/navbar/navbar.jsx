@@ -26,8 +26,6 @@ function Navbar() {
     return null;
   }
 
-
-
   const handleLogout = () => {
     localStorage.removeItem("user");
     localStorage.removeItem("cart");

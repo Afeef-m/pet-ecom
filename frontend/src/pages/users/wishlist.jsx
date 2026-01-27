@@ -19,7 +19,7 @@ function Wishlist() {
 
   const addToCart = (item) => {
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    const already = cart.find((p) => p.id === item.id);
+    const already = cart.find((p) => p._id === item._id);
     if (!already) {
       cart.push({ ...item, quantity: 1, weight: item.weight || "Unknown" });
       localStorage.setItem("cart", JSON.stringify(cart));

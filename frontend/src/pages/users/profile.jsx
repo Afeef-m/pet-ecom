@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import axios from "axios";
 import {
   FaUserEdit,
   FaSignOutAlt,
@@ -9,6 +8,7 @@ import {
   FaHeart,
   FaShoppingCart,
 } from "react-icons/fa";
+import { api } from "../../api";
 
 function Profile() {
   const navigate = useNavigate();
@@ -41,7 +41,7 @@ function Profile() {
     setLoading(true);
     try {
       const updatedUser = { ...user, name, email, password };
-      await axios.patch(`http://localhost:3001/users/${user.id}`, updatedUser);
+      await api.patch(`/users/${user._id}`, updatedUser);
       setUser(updatedUser);
       localStorage.setItem("user", JSON.stringify(updatedUser));
       setEditMode(false);

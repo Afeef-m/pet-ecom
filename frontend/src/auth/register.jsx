@@ -1,19 +1,18 @@
 import React, { useState } from 'react';
-import axios from "axios";
 import { toast } from 'react-toastify';
 import { Link, useNavigate } from "react-router-dom";
 import { SlArrowRightCircle } from "react-icons/sl";
+import { api } from '../api';
 
-
-function Register() {
-  const [user, setUser] = useState({ name: "", email: "", password: "", role: "user", status: "active" });
+export default function Register() {
+   const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
   const handleRegister = async () => {
-    const { name, email, password } = user;
-
-    if (!name || !email || !password) {
-      toast.info("Fill all fields!");
+    if( !name, !email, !password){
+      toast.info("Fill all field")
       return;
     }
 
@@ -36,12 +35,13 @@ function Register() {
     }
 
     try {
-      await axios.post("http://localhost:3001/users", user);
+      await api.post(`/auth/register`,{
+        name, email, password
+      });
       toast.success("Registered successfully!");
       navigate("/login");
     } catch (err) {
-      console.error("Registration error", err);
-      toast.error("Registration failed.");
+      toast.error(err.response?.data?.message || "Registration failed.");
     }
   };
 
@@ -77,7 +77,7 @@ function Register() {
             className="form-control"
             placeholder="Name"
             autoComplete="off"
-            onChange={(e) => setUser({ ...user, name: e.target.value })}
+            onChange={(e) => setName(e.target.value )}
           />
         </div>
 
@@ -88,7 +88,7 @@ function Register() {
             className="form-control"
             placeholder="Email"
             autoComplete="off"
-            onChange={(e) => setUser({ ...user, email: e.target.value })}
+            onChange={(e) => setEmail(e.target.value )}
           />
         </div>
 
@@ -99,7 +99,7 @@ function Register() {
             className="form-control"
             placeholder="Password"
             autoComplete="off"
-            onChange={(e) => setUser({ ...user, password: e.target.value })}
+            onChange={(e) => setPassword( e.target.value)}
           />
         </div>
 
@@ -126,4 +126,4 @@ function Register() {
   );
 }
 
-export default Register;
+

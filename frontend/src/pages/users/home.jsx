@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import "./home.css";
+import { api } from "../../api";
 
 function Home() {
   const [products, setProducts] = useState([]);
@@ -19,12 +19,12 @@ function Home() {
     const fetchData = async () => {
       try {
         const [productsRes, accessoriesRes] = await Promise.all([
-          axios.get("http://localhost:3001/products"),
-          axios.get("http://localhost:3001/accessories"),
+          api.get(`/products?type=food`),
+          api.get(`/products?type=accessories`)
         ]);
 
-        const uniqueProducts = Array.from(new Map(productsRes.data.map((item) => [item.id, item])).values());
-        const uniqueAccessories = Array.from(new Map(accessoriesRes.data.map((item) => [item.id, item])).values());
+        const uniqueProducts = Array.from(new Map(productsRes.data.map((item) => [item._id, item])).values());
+        const uniqueAccessories = Array.from(new Map(accessoriesRes.data.map((item) => [item._id, item])).values());
 
         setProducts(uniqueProducts);
         setAccessories(uniqueAccessories);
@@ -135,11 +135,11 @@ function Home() {
               {sortedProducts.map((item) => (
                 <div
                   className="col-8 col-sm-6 col-md-4 col-lg-3 mb-4"
-                  key={item.id}
+                  key={item._id}
                 >
                   <div className="product-card p-3">
                     <Link
-                      to={`/product/${item.id}`}
+                      to={`/product/${item._id}`}
                       style={{ textDecoration: "none", color: "inherit" }}
                     >
                       <img
@@ -200,11 +200,11 @@ function Home() {
               {sortedAccessories.map((item) => (
                 <div
                   className="col-8 col-sm-6 col-md-4 col-lg-3 mb-4"
-                  key={item.id}
+                  key={item._id}
                 >
                   <div className="product-card p-3">
                     <Link
-                      to={`/accessory/${item.id}`}
+                      to={`/accessory/${item._id}`}
                       style={{ textDecoration: "none", color: "inherit" }}
                     >
                       <img

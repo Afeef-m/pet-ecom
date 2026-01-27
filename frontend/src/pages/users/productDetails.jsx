@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
 import { toast } from "react-toastify";
+import { api } from "../../api";
 
 function ProductDetails() {
   const { id } = useParams();
@@ -13,30 +13,24 @@ function ProductDetails() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:3001/products/${id}`)
-      .then((res) => {
-        setProduct(res.data);
-      })
-      .catch(() => {
-        axios
-          .get(`http://localhost:3001/accessories/${id}`)
-          .then((res) => setProduct(res.data))
-          .catch(() => setProduct(null));
-      });
+    api
+      .get(`/products/${id}`)
+      .then((res) => setProduct(res.data))
+      .catch(() => setProduct(null));
   }, [id]);
 
   useEffect(() => {
-    if (product) {
+     if (!product) return;
+
       const cart = JSON.parse(localStorage.getItem("cart")) || [];
       const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
 
-      setInCart(cart.some((item) => item.id === product.id));
-      setInWishlist(wishlist.some((item) => item.id === product.id));
-    }
+      setInCart(cart.some((item) => item._id === product._id));
+      setInWishlist(wishlist.some((item) => item._id === product._id));
+    
   }, [product]);
 
-  if (!product) return <div className="text-center mt-5">Loading...</div>;
+  if (!product) return <div className="text-center mt-5">Product not found</div>;
 
   const handleCart = () => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -47,14 +41,12 @@ function ProductDetails() {
 
     let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-    const index = cart.findIndex((item) => item.id === product.id);
+    const index = cart.findIndex((item) => item._id === product._id);
 
     if (index !== -1) {
-      // Already in cart => Increase quantity
       cart[index].quantity += parseInt(quantity);
       toast.success(`Quantity updated to ${cart[index].quantity}`);
     } else {
-      // Not in cart => Add new item
       cart.push({
         ...product,
         quantity: parseInt(quantity),
@@ -64,7 +56,7 @@ function ProductDetails() {
     }
 
     localStorage.setItem("cart", JSON.stringify(cart));
-    setInCart(true); // always set true after adding/increasing
+    setInCart(true); 
   };
 
   const handleWishlist = () => {
@@ -77,7 +69,7 @@ function ProductDetails() {
     let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
 
     if (inWishlist) {
-      wishlist = wishlist.filter((item) => item.id !== product.id);
+      wishlist = wishlist.filter((item) => item._id !== product._id);
       localStorage.setItem("wishlist", JSON.stringify(wishlist));
       toast.warn("Removed from wishlist");
       setInWishlist(false);
@@ -92,14 +84,14 @@ function ProductDetails() {
   const handleBuyNow = () => {
     const user = JSON.parse(localStorage.getItem("user"));
     if (!user) {
-      toast.warning("Login to Buy Now");
+      toast.warning("Login to Buy");
       return;
     }
 
     navigate("/checkout", {
       state: {
         from: "buyNow",
-        cart: [{ ...product, quantity: parseInt(quantity) }],
+        cart: [{ ...product, quantity: Number(quantity) }],
       },
     });
   };

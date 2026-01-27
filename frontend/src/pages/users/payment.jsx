@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { api } from "../../api";
 
 function Payment() {
   const location = useLocation();
@@ -27,11 +28,11 @@ function Payment() {
     }
 
     const newOrder = {
-      userId: currentUser.id,
+      userId: currentUser._id,
       items: actualCart.map((item) => ({
-        productId: item.id,
+        productId: item._id,
         name: item.name,
-        price: item.price,
+        price: Number(item.price),
         quantity: item.quantity,
       })),
       totalPrice: actualTotal,
@@ -42,13 +43,9 @@ function Payment() {
     };
 
     try {
-      const response = await fetch("http://localhost:3001/orders", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newOrder),
-      });
+      const response = await api.post(`/orders`, newOrder);
 
-      if (response.ok) {
+      if (response.status === 201) {
         toast.success("Order placed successfully!");
 
         if (cart) localStorage.removeItem("cart");
@@ -72,7 +69,7 @@ function Payment() {
           <div className="card p-4 shadow">
             <h4>Your Order:</h4>
             {actualCart.map((item) => (
-              <div key={item.id} className="d-flex justify-content-between">
+              <div key={item._id} className="d-flex justify-content-between">
                 <div>
                   {item.name} (x{item.quantity})
                 </div>

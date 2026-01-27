@@ -48,7 +48,7 @@ function AdminManageUser() {
         </div>
 
         <div className="table-responsive">
-          <table className="table table-bordered text-center align-middle">
+          <table className="table table-bordered text-center align-m_iddle">
             <thead className="table-light">
               <tr>
                 <th>Name</th>
@@ -62,10 +62,10 @@ function AdminManageUser() {
             <tbody>
               {filteredUsers.length > 0 ? (
                 filteredUsers.map((user) => {
-                  const userOrders = orders.filter((order) => order.userId === user.id);
+                  const userOrders = orders.filter((order) => order.user_Id === user.__id);
 
                   return (
-                    <tr key={user.id}>
+                    <tr key={user.__id}>
                       <td>{user.name}</td>
                       <td>{user.email}</td>
                       <td><span className={`badge ${
@@ -82,32 +82,32 @@ function AdminManageUser() {
                         {user.status === "blocked" ? (
                           <button
                             className="btn btn-sm btn-success me-2"
-                            onClick={() => unblockUser(user.id)}
-                            disabled={user.id === currentUser?.id}
+                            onClick={() => unblockUser(user._id)}
+                            disabled={user._id === currentUser?._id}
                           >
                             Unblock
                           </button>
                         ) : user.status === "inactive" ? (
                           <button
                             className="btn btn-sm btn-primary me-2"
-                            onClick={() => activateUser(user.id)}
-                            disabled={user.id === currentUser?.id}
+                            onClick={() => activateUser(user._id)}
+                            disabled={user._id === currentUser?._id}
                           >
                             Activate
                           </button>
                         ) : (
                           <button
                             className="btn btn-sm btn-warning me-2"
-                            onClick={() => blockUser(user.id)}
-                            disabled={user.id === currentUser?.id}
+                            onClick={() => blockUser(user._id)}
+                            disabled={user._id === currentUser?._id}
                           >
                             Block
                           </button>
                         )}
                         <button
                           className="btn btn-sm btn-danger"
-                          onClick={() => deleteUser(user.id)}
-                          disabled={user.id === currentUser?.id}
+                          onClick={() => deleteUser(user._id)}
+                          disabled={user._id === currentUser?._id}
                         >
                           Delete
                         </button>

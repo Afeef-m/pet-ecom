@@ -21,9 +21,9 @@ function AdminOrders() {
             return (
               <div
                 className="card shadow-sm p-3"
-                key={order.id}
+                key={order._id}
                 style={{ width: "24rem" }}>
-                <h5>Order ID: {order.id}</h5>
+                <h5>Order ID: {order._id}</h5>
                 <p><strong>User ID:</strong> {order.userId}</p>
                 <p><strong>User Name:</strong> {order.userName}</p>
                 <p><strong>Total:</strong> ₹{total.toLocaleString()}</p>
@@ -45,14 +45,14 @@ function AdminOrders() {
                   {order.status !== "Delivered" && (
                     <button
                       className="btn btn-sm btn-success"
-                      onClick={() => updateOrderStatus(order.id, "Delivered")}>
+                      onClick={() => updateOrderStatus(order._id, "Delivered")}>
                       Mark as Delivered
                     </button>
                   )}
                   {order.status !== "Cancelled" && (
                     <button
                       className="btn btn-sm btn-danger"
-                      onClick={() => updateOrderStatus(order.id, "Cancelled")}>
+                      onClick={() => updateOrderStatus(order._id, "Cancelled")}>
                       Cancel Order
                     </button>
                   )}

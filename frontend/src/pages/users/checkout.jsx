@@ -55,7 +55,7 @@ function Checkout() {
 
         <h5>Order Summary:</h5>
         {cart.map((item) => (
-          <div key={item.id} className="d-flex justify-content-between">
+          <div key={item._id} className="d-flex justify-content-between">
             <div>
               {item.name} (x {item.quantity})
             </div>
