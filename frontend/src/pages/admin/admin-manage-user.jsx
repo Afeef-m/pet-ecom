@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from "react";
 import useUsers from "./hooks/useUsers";
 
-function AdminManageUser() {
+export default function AdminManageUser() {
   const { users, orders, blockUser, unblockUser, deleteUser, activateUser } = useUsers();
   const currentUser = JSON.parse(localStorage.getItem("user"));
 
@@ -128,4 +128,3 @@ function AdminManageUser() {
   );
 }
 
-export default AdminManageUser;

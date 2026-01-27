@@ -13,7 +13,6 @@ function Checkout() {
   const total = cart?.reduce(
     (acc, item) => acc + item.price * item.quantity,0
   );
-
   const handleProceed = () => {
     if (!user) {
       toast.warning("Login first!");

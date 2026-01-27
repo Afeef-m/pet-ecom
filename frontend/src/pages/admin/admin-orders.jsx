@@ -1,7 +1,7 @@
 import React from "react";
 import useOrders from "./hooks/useOrders";
 
-function AdminOrders() {
+export default function AdminOrders() {
   const { orders, loading, updateOrderStatus } = useOrders();
 
   if (loading) return <p className="text-center my-5">Loading orders...</p>;
@@ -66,4 +66,4 @@ function AdminOrders() {
   );
 }
 
-export default AdminOrders;
+

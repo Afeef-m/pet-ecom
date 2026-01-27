@@ -22,7 +22,6 @@ function Home() {
           api.get(`/products?type=food`),
           api.get(`/products?type=accessories`)
         ]);
-
         const uniqueProducts = Array.from(new Map(productsRes.data.map((item) => [item._id, item])).values());
         const uniqueAccessories = Array.from(new Map(accessoriesRes.data.map((item) => [item._id, item])).values());
 

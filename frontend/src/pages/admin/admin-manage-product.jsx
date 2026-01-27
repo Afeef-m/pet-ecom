@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import useProduct from "./hooks/useProducts";
 import { toast } from "react-toastify";
 
-function AdminProduct() {
+export default function AdminProduct() {
   const {
     products,
     loading,
@@ -269,4 +269,3 @@ function AdminProduct() {
   );
 }
 
-export default AdminProduct;
