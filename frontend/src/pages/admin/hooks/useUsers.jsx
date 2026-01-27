@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { api } from "../../../api";
 
-function useUsers() {
+export default function useUsers() {
   const [users, setUsers] = useState([]);
   const [orders, setOrders] = useState([]);
 
@@ -35,5 +35,3 @@ function useUsers() {
 
   return { users, orders, blockUser, unblockUser, deleteUser, activateUser };
 }
-
-export default useUsers;

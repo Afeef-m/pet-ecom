@@ -4,7 +4,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { FaHome, FaShoppingCart, FaHeart, FaBoxOpen, FaUser, FaSignInAlt, FaUserPlus, FaSignOutAlt } from "react-icons/fa";
 import "./navbar.css";
 
-function Navbar() {
+export default function Navbar() {
   const [loggedIn, setLoggedIn] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -153,4 +153,3 @@ function Navbar() {
   );
 }
 
-export default Navbar;

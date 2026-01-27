@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { api } from "../../../api";
 
-function useOrders() {
+export default function useOrders() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -28,4 +28,3 @@ function useOrders() {
   return { orders, loading, updateOrderStatus };
 }
 
-export default useOrders;

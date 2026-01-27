@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { api } from "../../../api";
 
-function useProduct() {
+export default function useProduct() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -45,5 +45,3 @@ function useProduct() {
     updateStatus
   };
 }
-
-export default useProduct;
