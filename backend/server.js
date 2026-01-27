@@ -12,12 +12,12 @@ app.use(express.json());
 // CORS NEXT
 app.use(
   cors({
-    origin: ["https://pet-ecom-nine.vercel.app"],
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    origin: "https://pet-ecom-nine.vercel.app",
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true,
   })
 );
+
 // DB
 connectDB();
 
