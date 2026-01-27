@@ -87,7 +87,6 @@ function ProductDetails() {
       toast.warning("Login to Buy");
       return;
     }
-
     navigate("/checkout", {
       state: {
         from: "buyNow",

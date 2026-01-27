@@ -16,7 +16,6 @@ function Wishlist() {
     setWishlist(updated);
     localStorage.setItem("wishlist", JSON.stringify(updated));
   };
-
   const addToCart = (item) => {
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
     const already = cart.find((p) => p._id === item._id);

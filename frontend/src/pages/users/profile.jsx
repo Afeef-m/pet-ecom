@@ -31,7 +31,6 @@ function Profile() {
       setPassword(storedUser.password);
     }
   }, [navigate]);
-
   const handleLogout = () => {
     localStorage.removeItem("user");
     navigate("/login");

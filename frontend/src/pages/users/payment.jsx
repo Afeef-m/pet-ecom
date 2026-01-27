@@ -120,7 +120,6 @@ function Payment() {
                 Cash on Delivery
               </label>
             </div>
-
             <div>
               <button
                 className="btn btn-success mt-3"
