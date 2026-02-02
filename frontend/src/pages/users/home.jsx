@@ -14,9 +14,11 @@ function Home() {
 
   const [searchAcc, setSearchAcc] = useState("");
   const [sortOrderAcc, setSortOrderAcc] = useState("none");
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true)
       try {
         const [productsRes, accessoriesRes] = await Promise.all([
           api.get(`/products?type=food`),
@@ -29,6 +31,8 @@ function Home() {
         setAccessories(uniqueAccessories);
       } catch {
         toast.error("Failed to fetch products/accessories");
+      }finally{
+        setLoading(false)
       }
     };
 
@@ -60,6 +64,9 @@ function Home() {
     if (sortOrderAcc === "highToLow") return b.price - a.price;
     return 0;
   });
+
+if (loading) return <p>Loading Products...</p>
+
 
   return (
     <div className="home-page">
