@@ -235,7 +235,7 @@ if (loading) return <p>Loading Products...</p>
         <div className="footer-line mx-auto mb-2"></div>
 
         <p className="text-muted">
-          © 2025 Peppers Palace. All rights reserved.
+          © {new Date().getFullYear()} Peppers Palace. All rights reserved.
         </p>
       </footer>
     </div>
