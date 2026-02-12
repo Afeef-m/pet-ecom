@@ -68,7 +68,7 @@ function Cart() {
       {cartItems.map((item, index) => (
         <div key={index} className="card mb-4 shadow-sm border-0">
   <div className="row g-0 align-items-center">
-    {/* Image */}
+    
     <div className="col-md-2 text-center">
       <img
         src={item.image}

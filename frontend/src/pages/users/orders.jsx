@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { FaBoxOpen } from "react-icons/fa";
 import { api } from "../../api";
+import { Loader2Icon } from "lucide-react";
 
 function Orders() {
   const [orders, setOrders] = useState([]);
@@ -43,7 +44,14 @@ function Orders() {
     }
   };
 
-  if (loading) return<p className="text-center my-5">Loading orders...</p>;
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-[50vh] text-gray-400 gap-2">
+        <Loader2Icon size={24} className="animate-spin" />
+        <span>Loading Orders...</span>
+      </div>
+    );
+  }
 
   return (
       <div className="container my-5">

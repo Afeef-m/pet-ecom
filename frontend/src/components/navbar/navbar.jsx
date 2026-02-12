@@ -1,8 +1,8 @@
 import React from "react";
 import { useRef, useEffect, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { FaHome, FaShoppingCart, FaHeart, FaBoxOpen, FaUser, FaSignInAlt, FaUserPlus, FaSignOutAlt } from "react-icons/fa";
 import "./navbar.css";
+import { HeartPlus, House, LogIn, LogOut, Logs, ShoppingCart, UserCog, UserPlus } from "lucide-react";
 
 export default function Navbar() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -73,7 +73,7 @@ export default function Navbar() {
 
           <div className="d-flex flex-column flex-lg-row align-items-center gap-3 ms-auto fs-4">
             <Link to="/" className="btn" onClick={collapseNavbar} title="Home">
-              <FaHome size={30}/>
+              <House size={30}/>
             </Link>
             <Link
               to="/cart"
@@ -81,7 +81,7 @@ export default function Navbar() {
               onClick={collapseNavbar}
               title="Cart"
             >
-              <FaShoppingCart size={30}/>
+              <ShoppingCart size={30}/>
             </Link>
             <Link
               to="/wishlist"
@@ -89,7 +89,7 @@ export default function Navbar() {
               onClick={collapseNavbar}
               title="Wishlist"
             >
-              <FaHeart size={30}/>
+              <HeartPlus size={30}/>
             </Link>
 
             {loggedIn && (
@@ -100,7 +100,7 @@ export default function Navbar() {
                   onClick={collapseNavbar}
                   title="Orders"
                 >
-                  <FaBoxOpen size={30}/>
+                  <Logs size={30}/>
                 </Link>
                 <Link
                   to="/profile"
@@ -108,7 +108,7 @@ export default function Navbar() {
                   onClick={collapseNavbar}
                   title="Profile"
                 >
-                  <FaUser size={30}/>
+                  <UserCog size={30}/>
                 </Link>
               </>
             )}
@@ -121,7 +121,7 @@ export default function Navbar() {
                   onClick={collapseNavbar}
                   title="Login"
                 >
-                  <FaSignInAlt size={20}/>
+                  <LogIn size={20}/>
                 </Link>
                 <Link
                   to="/register"
@@ -129,7 +129,7 @@ export default function Navbar() {
                   onClick={collapseNavbar}
                   title="Register"
                 >
-                  <FaUserPlus size={20}/>
+                  <UserPlus size={20}/>
                 </Link>
               </>
             )}
@@ -143,7 +143,7 @@ export default function Navbar() {
                 }}
                 title="Logout"
               >
-                <FaSignOutAlt size={25}/>
+                <LogOut size={25}/>
               </button>
             )}
           </div>
