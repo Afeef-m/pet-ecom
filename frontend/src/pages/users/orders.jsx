@@ -44,14 +44,16 @@ function Orders() {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-[50vh] text-gray-400 gap-2">
-        <Loader2Icon size={24} className="animate-spin" />
-        <span>Loading Orders...</span>
+ if (loading) {
+  return (
+    <div className="vh-100 d-flex justify-content-center align-items-center text-secondary gap-2">
+      <div className="spinner-border" role="status" style={{ width: "1.5rem", height: "1.5rem" }}>
+        <span className="visually-hidden">Loading...</span>
       </div>
-    );
-  }
+      <span>Loading Orders...</span>
+    </div>
+  );
+}
 
   return (
       <div className="container my-5">
