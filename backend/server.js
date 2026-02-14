@@ -5,16 +5,28 @@ const connectDB = require("./config/db");
 
 const app = express();
 
-// body parsers FIRST
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// CORS NEXT
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://pet-ecom-nine.vercel.app"
+];
+
 app.use(
   cors({
-    origin: "https://pet-ecom-nine.vercel.app",
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true
   })
 );
 
