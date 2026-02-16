@@ -8,10 +8,11 @@ function Checkout() {
   const [address, setAddress] = useState("");
 
   const user = JSON.parse(localStorage.getItem("user"));
-  const { cart} = location.state || {};
+  const { cart } = location.state || {};
 
   const total = cart?.reduce(
-    (acc, item) => acc + item.price * item.quantity,0
+    (acc, item) => acc + (item.productId?.price || 0) * item.quantity,
+    0,
   );
   const handleProceed = () => {
     if (!user) {
@@ -54,11 +55,14 @@ function Checkout() {
 
         <h5>Order Summary:</h5>
         {cart.map((item) => (
-          <div key={item._id} className="d-flex justify-content-between">
+          <div
+            key={item.productId?._id}
+            className="d-flex justify-content-between"
+          >
             <div>
-              {item.name} (x {item.quantity})
+              {item.productId?.name} (x {item.quantity})
             </div>
-            <div>₹{item.price * item.quantity}</div>
+            <div>₹{(item.productId?.price || 0) * item.quantity}</div>
           </div>
         ))}
         <hr />

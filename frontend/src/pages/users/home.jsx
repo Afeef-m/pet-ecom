@@ -3,7 +3,6 @@ import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import "./home.css";
 import { api } from "../../api";
-import { Loader2Icon } from "lucide-react";
 
 function Home() {
   const [products, setProducts] = useState([]);
@@ -40,7 +39,7 @@ function Home() {
     fetchData();
   }, []);
 
-
+const skeletonCount = products.length || 4;
   const filterProducts =
     category === "All"
       ? products
@@ -66,45 +65,51 @@ function Home() {
     return 0;
   });
 
-if (loading) {
-  return (
-    <div className="vh-100 d-flex justify-content-center align-items-center text-secondary gap-2">
-      <div className="spinner-border" role="status" style={{ width: "1.5rem", height: "1.5rem" }}>
-        <span className="visually-hidden">Loading...</span>
-      </div>
-      <span>Loading Dashboard...</span>
-    </div>
-  );
-}
 
 
   return (
     <div className="home-page">
       <section className="hero-section d-flex align-items-center bg-beige">
-        <div className="container d-flex flex-column flex-md-row align-items-center py-5">
-          <div className="w-100 w-md-50 text-center">
-            <img
-              src="/images/home-slide-bg.png"
-              alt="Pet Dog"
-              className="img-fluid"
-              style={{ maxHeight: "400px" }}
-            />
-          </div>
-          <div className="w-100 w-md-50 text-center text-md-start px-md-5 mt-4 mt-md-0">
-            <p className="text-uppercase text-muted small fw-semibold">
-              Save 10 - 20% Off
-            </p>
-            <h1 className="display-5 fw-bold">
-              Best Destination <br /> For{" "}
-              <span className="highlight-text">Your Pets</span>
-            </h1>
-            <h3 className="lead mt-3 text-muted fw-normal hero-description">
-              Discover premium pet food and accessories for your beloved pets.
-              Up to 20% off with fast delivery!
-            </h3>
-          </div>
-        </div>
-      </section>
+  <div className="container d-flex flex-column flex-md-row align-items-center py-5">
+    
+    <div className="w-100 w-md-50 text-center">
+      {loading ? (
+        <div className="skeleton skeleton-image"></div>
+      ) : (
+        <img
+          src="/images/home-slide-bg.png"
+          alt="Pet Dog"
+          className="img-fluid"
+          style={{ maxHeight: "400px" }}
+        />
+      )}
+    </div>
+
+    <div className="w-100 w-md-50 text-center text-md-start px-md-5 mt-4 mt-md-0">
+      {loading ? (
+        <>
+          <div className="skeleton skeleton-text" style={{ width: "30%" }}></div>
+          <div className="skeleton skeleton-title"></div>
+          <div className="skeleton skeleton-text" style={{ width: "80%" }}></div>
+          <div className="skeleton skeleton-text" style={{ width: "70%" }}></div>
+        </>
+      ) : (
+        <>
+          <p className="text-uppercase text-muted small fw-semibold">
+            Save 10 - 20% Off
+          </p>
+          <h1 className="display-5 fw-bold">
+            Best Destination <br />
+            For <span className="highlight-text">Your Pets</span>
+          </h1>
+          <h3 className="lead mt-3 text-muted fw-normal hero-description">
+            Discover premium pet food and accessories...
+          </h3>
+        </>
+      )}
+    </div>
+  </div>
+</section>
 
       <div className="mini-navbar text-center py-3">
         <div className="category-nav mt-2">
@@ -120,69 +125,98 @@ if (loading) {
         </div>
       </div>
 
-      <section className="container py-4">
-        <div className="d-flex flex-column flex-md-row justify-content-between align-items-center mb-3 gap-3">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Search pet food..."
-            style={{ maxWidth: "300px", borderRadius: "15px" }}
-            value={searchFood}
-            onChange={(e) => setSearchFood(e.target.value)}
-          />
-          <select
-            className="form-select"
-            style={{ maxWidth: "200px" }}
-            value={sortOrderFood}
-            onChange={(e) => setSortOrderFood(e.target.value)}
-          >
-            <option value="none">Filter</option>
-            <option value="lowToHigh">Price: Low to High</option>
-            <option value="highToLow">Price: High to Low</option>
-          </select>
-        </div>
+<section className="container py-4">
+  <div className="d-flex flex-column flex-md-row justify-content-between align-items-center mb-3 gap-3">
+    <input
+      type="text"
+      className="form-control"
+      placeholder="Search pet food..."
+      style={{ maxWidth: "300px", borderRadius: "15px" }}
+      value={searchFood}
+      onChange={(e) => setSearchFood(e.target.value)}
+    />
+    <select
+      className="form-select"
+      style={{ maxWidth: "200px" }}
+      value={sortOrderFood}
+      onChange={(e) => setSortOrderFood(e.target.value)}
+    >
+      <option value="none">Filter</option>
+      <option value="lowToHigh">Price: Low to High</option>
+      <option value="highToLow">Price: High to Low</option>
+    </select>
+  </div>
 
-        <h3 className="section-title">Pet Food</h3>
-        {sortedProducts.length === 0 ? (
-          <p className="text-center text-muted">No products found.</p>
-        ) : (
-          <div className="scroll-container">
-            <div className="row flex-nowrap">
-              {sortedProducts.map((item) => (
-                <div
-                  className="col-8 col-sm-6 col-md-4 col-lg-3 mb-4"
-                  key={item._id}
-                >
-                  <div className="product-card p-3">
-                    <Link
-                      to={`/product/${item._id}`}
-                      style={{ textDecoration: "none", color: "inherit" }}
-                    >
-                      <img
-                        src={item.image}
-                        alt={item.name}
-                        className="product-image mb-3"
-                      />
-                      <hr />
-                      <h6 className="product-title">{item.name}</h6>
-                      <p className="product-price">₹{item.price}</p>
-                    </Link>
-                  </div>
-                </div>
-              ))}
+  <h3 className="section-title">Pet Food</h3>
+
+  <div className="scroll-container">
+    <div className="row flex-nowrap">
+
+      {loading ? (
+        Array.from({ length: skeletonCount })
+        .map((_, index) => (
+          <div
+            className="col-8 col-sm-6 col-md-4 col-lg-3 mb-4"
+            key={index}
+          >
+            <div className="product-card p-3">
+              <div className="skeleton skeleton-image mb-3"></div>
+              <div
+                className="skeleton skeleton-text"
+                style={{ width: "60%" }}
+              ></div>
+              <div
+                className="skeleton skeleton-text"
+                style={{ width: "40%" }}
+              ></div>
             </div>
           </div>
-        )}
-      </section>
+        ))
+      ) : sortedProducts.length === 0 ? (
+        <div className="col-12 text-center text-muted">
+          No products found.
+        </div>
+      ) : (
+        sortedProducts.map((item) => (
+          <div
+            className="col-8 col-sm-6 col-md-4 col-lg-3 mb-4"
+            key={item._id}
+          >
+            <div className="product-card p-3">
+              <Link
+                to={`/product/${item._id}`}
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  className="product-image mb-3"
+                />
+                <hr />
+                <h6 className="product-title">{item.name}</h6>
+                <p className="product-price">₹{item.price}</p>
+              </Link>
+            </div>
+          </div>
+        ))
+      )}
+
+    </div>
+  </div>
+</section>
 
       {/* Promo Banner */}
-      <div className="banner-section container my-4">
-        <img
-          src="/images/whiskas-slide.jpg"
-          alt="whiskas banner"
-          className="img-fluid rounded promo-img shadow-sm"
-        />
-      </div>
+    <div className="banner-section container my-4">
+  {loading ? (
+    <div className="skeleton skeleton-banner"></div>
+  ) : (
+    <img
+      src="/images/whiskas-slide.jpg"
+      alt="whiskas banner"
+      className="img-fluid rounded promo-img shadow-sm"
+    />
+  )}
+</div>
 
       {/* Accessories Section */}
       <section className="container py-4">

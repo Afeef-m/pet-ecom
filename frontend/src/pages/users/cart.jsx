@@ -2,134 +2,209 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { FaShoppingCart } from "react-icons/fa";
+import { api } from "../../api";
 
 function Cart() {
   const [cartItems, setCartItems] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const storeCart = JSON.parse(localStorage.getItem("cart")) || [];
-    const updatedCart = storeCart.map((item) => ({
-      ...item,
-      quantity: item.quantity || 1,
-    }));
-    setCartItems(updatedCart);
+    const fetchCart = async () => {
+      try {
+        const res = await api.get("/cart");
+        setCartItems(res.data?.items || []);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchCart();
   }, []);
 
-  const updateQuantity = (index, change) => {
-    const updated = [...cartItems];
-    updated[index].quantity = Math.max(1, updated[index].quantity + change);
-    setCartItems(updated);
-    localStorage.setItem("cart", JSON.stringify(updated));
+  const updateQuantity = async (productId, change) => {
+    try {
+      const res = await api.put("/cart/update", {
+        productId,
+        change,
+      });
+
+      setCartItems(res.data?.items || []);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
-  const removeFromCart = (index) => {
-    const updated = [...cartItems];
-    updated.splice(index, 1);
-    setCartItems(updated);
-    localStorage.setItem("cart", JSON.stringify(updated));
-    toast.warn("Item removed from cart");
+  const removeFromCart = async (productId) => {
+    try {
+      const res = await api.delete(`/cart/remove/${productId}`);
+      setCartItems(res.data?.items || []);
+      toast.warn("Item removed");
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const total = cartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
+    (sum, item) => sum + (item.productId?.price || 0) * item.quantity,
+    0,
   );
 
-  const handleBuy = () => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (!user) {
-      toast.info("Please login to place order");
-      return;
-    }
+  const handleBuy = async () => {
+    try {
+      const res = await api.get("/cart");
+      const total = res.data.items.reduce(
+        (sum, item) => sum + item.productId.price * item.quantity,
+        0,
+      );
 
-    const total = cartItems.reduce(
-      (sum, item) => sum + item.price * item.quantity,
-      0
-    );
-    navigate("/checkout", {
-      state: {
-        cart: cartItems,
-        total,
-      },
-    });
+      navigate("/checkout", {
+        state: {
+          cart: res.data.items,
+          total,
+        },
+      });
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
-   <div className="container my-5">
-  <h2 className="mb-4 fw-bold"><FaShoppingCart/> Your Cart</h2>
+    <div className="container py-5">
+  <h2 className="fw-bold mb-4 d-flex align-items-center gap-2">
+    <FaShoppingCart /> Shopping Cart
+  </h2>
 
   {cartItems.length === 0 ? (
-    <div className="alert alert-warning text-center">
-      Your cart is empty 
+    <div className="text-center py-5">
+      <h5 className="text-muted">Your cart is empty</h5>
+      <button className="btn btn-dark mt-3" onClick={() => navigate("/")}>
+        Continue Shopping
+      </button>
     </div>
   ) : (
-    <>
-      {cartItems.map((item, index) => (
-        <div key={index} className="card mb-4 shadow-sm border-0">
-  <div className="row g-0 align-items-center">
-    
-    <div className="col-md-2 text-center">
-      <img
-        src={item.image}
-        className="img-fluid rounded-start p-2"
-        alt={item.name}
-        style={{ maxHeight: "100px" }}
-      />
-    </div>
-
-    {/* Product Info */}
-    <div className="col-md-7">
-      <div className="card-body">
-        <h5 className="card-title mb-1">{item.name}</h5>
-        <p className="mb-1">Price: ₹{item.price}</p>
-        <p className="text-muted mb-2">
-          Weight: {item.weight || "Unknown"}
-        </p>
-
-        {/* Quantity Controls */}
-        <div className="d-flex align-items-center gap-2">
-          <button
-            className="btn btn-sm btn-outline-secondary"
-            onClick={() => updateQuantity(index, -1)}
+    <div className="row g-4">
+      
+      {/* LEFT SIDE - PRODUCTS */}
+      <div className="col-lg-8">
+        {cartItems.map((item) => (
+          <div
+            key={item.productId._id}
+            className="card border-0 shadow-sm mb-4 p-3"
+            style={{ borderRadius: "14px" }}
           >
-            −
-          </button>
-          <span className="fw-bold">{item.quantity}</span>
+            <div className="row align-items-center">
+
+              {/* Image */}
+              <div className="col-md-3 text-center">
+                <img
+                  src={item.productId?.image}
+                  alt={item.productId?.name}
+                  className="img-fluid"
+                  style={{
+                    maxHeight: "140px",
+                    objectFit: "contain",
+                  }}
+                />
+              </div>
+
+              {/* Product Info */}
+              <div className="col-md-5">
+                <h5 className="fw-semibold mb-2">
+                  {item.productId?.name}
+                </h5>
+                <p className="text-muted small mb-1">
+                  Weight: {item.productId?.weight || "Not specified"}
+                </p>
+                <h6 className="fw-bold text-success">
+                  ₹{item.productId?.price}
+                </h6>
+              </div>
+
+              {/* Quantity + Remove */}
+              <div className="col-md-4 text-md-end mt-3 mt-md-0">
+
+                <div className="d-inline-flex align-items-center border rounded-pill px-3 py-1 mb-3">
+                  <button
+                    className="btn btn-sm"
+                    onClick={() =>
+                      updateQuantity(item.productId._id, -1)
+                    }
+                  >
+                    −
+                  </button>
+
+                  <span className="mx-3 fw-semibold">
+                    {item.quantity}
+                  </span>
+
+                  <button
+                    className="btn btn-sm"
+                    onClick={() =>
+                      updateQuantity(item.productId._id, 1)
+                    }
+                  >
+                    +
+                  </button>
+                </div>
+
+                <div>
+                  <button
+                    className="btn btn-sm btn-outline-danger"
+                    onClick={() =>
+                      removeFromCart(item.productId._id)
+                    }
+                  >
+                    Remove
+                  </button>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="col-lg-4">
+        <div
+          className="card border-0 shadow-lg p-4"
+          style={{
+            borderRadius: "16px",
+            position: "sticky",
+            top: "100px",
+          }}
+        >
+          <h5 className="fw-bold mb-3">Order Summary</h5>
+
+          <div className="d-flex justify-content-between mb-2">
+            <span>Subtotal</span>
+            <span>₹{total.toLocaleString()}</span>
+          </div>
+
+          <div className="d-flex justify-content-between mb-3">
+            <span>Shipping</span>
+            <span className="text-success">Free</span>
+          </div>
+
+          <hr />
+
+          <div className="d-flex justify-content-between fw-bold fs-5">
+            <span>Total</span>
+            <span>₹{total.toLocaleString()}</span>
+          </div>
+
           <button
-            className="btn btn-sm btn-outline-secondary"
-            onClick={() => updateQuantity(index, 1)}
+            className="btn btn-dark w-100 mt-4"
+            style={{ borderRadius: "10px", padding: "12px" }}
+            onClick={handleBuy}
           >
-            +
+            Proceed to Checkout
           </button>
         </div>
       </div>
+
     </div>
-
-    {/* Remove Button - Center aligned vertically */}
-    <div className="col-md-3 d-flex justify-content-md-end justify-content-center align-items-center pe-4">
-      <button
-        className="btn btn-sm btn-outline-danger"
-        onClick={() => removeFromCart(index)}
-      >
-        Remove
-      </button>
-    </div>
-  </div>
-</div>
-
-      ))}
-
-      <div className="text-end">
-        <h4 className="fw-bold">Total: ₹{total.toLocaleString()}</h4>
-        <button className="btn btn-success px-4 mt-2" onClick={handleBuy}>
-          Proceed to Checkout
-        </button>
-      </div>
-    </>
   )}
 </div>
-
   );
 }
 

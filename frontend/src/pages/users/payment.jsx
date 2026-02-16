@@ -28,30 +28,30 @@ function Payment() {
     }
 
     const newOrder = {
-      userId: currentUser._id,
-      items: actualCart.map((item) => ({
-        productId: item._id,
-        name: item.name,
-        price: Number(item.price),
-        quantity: item.quantity,
-      })),
-      totalPrice: actualTotal,
-      paymentMethod,
-      address: address || "No address provided",
-      date: new Date().toLocaleString(),
-      status: "Pending",
-    };
+  userId: currentUser._id,
+  items: actualCart.map((item) => ({
+    productId: item.productId._id,
+    name: item.productId.name,
+    price: Number(item.productId.price),
+    quantity: item.quantity,
+  })),
+  totalPrice: actualTotal,
+  paymentMethod,
+  address,
+  date: new Date(),
+  status: "Pending",
+};
 
     try {
       const response = await api.post(`/orders`, newOrder);
 
       if (response.status === 201) {
-        toast.success("Order placed successfully!");
+  toast.success("Order placed successfully!");
 
-        if (cart) localStorage.removeItem("cart");
+  await api.delete("/cart/clear");
 
-        navigate("/orders");
-      } else {
+  navigate("/orders");
+} else {
         throw new Error("Failed to place order");
       }
     } catch (error) {
@@ -69,11 +69,11 @@ function Payment() {
           <div className="card p-4 shadow">
             <h4>Your Order:</h4>
             {actualCart.map((item) => (
-              <div key={item._id} className="d-flex justify-content-between">
+              <div key={item.productId._id} className="d-flex justify-content-between">
                 <div>
-                  {item.name} (x{item.quantity})
+                  {item.productId.name} (x{item.quantity})
                 </div>
-                <div>₹{item.price * item.quantity}</div>
+                <div>₹{item.productId.price * item.quantity}</div>
               </div>
             ))}
             <hr />

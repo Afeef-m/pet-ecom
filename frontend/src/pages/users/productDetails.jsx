@@ -19,66 +19,51 @@ function ProductDetails() {
       .catch(() => setProduct(null));
   }, [id]);
 
-  useEffect(() => {
-     if (!product) return;
-
-      const cart = JSON.parse(localStorage.getItem("cart")) || [];
-      const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
-
-      setInCart(cart.some((item) => item._id === product._id));
-      setInWishlist(wishlist.some((item) => item._id === product._id));
-    
-  }, [product]);
-
   if (!product) return <div className="text-center mt-5">Product not found</div>;
 
-  const handleCart = () => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (!user) {
-      toast.warning("Login to Add Cart!");
-      return;
-    }
+const handleCart = async () => {
+  const token = localStorage.getItem("token");
 
-    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  if (!token) {
+    toast.warning("Login to Add Cart!");
+    return;
+  }
 
-    const index = cart.findIndex((item) => item._id === product._id);
+  try {
+     await api.post("/cart/add", {
+      productId: product._id,
+      quantity: Number(quantity),
+    });
 
-    if (index !== -1) {
-      cart[index].quantity += parseInt(quantity);
-      toast.success(`Quantity updated to ${cart[index].quantity}`);
-    } else {
-      cart.push({
-        ...product,
-        quantity: parseInt(quantity),
-        weight: product.weight || "Unknown",
-      });
-      toast.success("Added to cart!");
-    }
+    toast.success("Added to cart!");
+    setInCart(true);
 
-    localStorage.setItem("cart", JSON.stringify(cart));
-    setInCart(true); 
-  };
+  } catch (err) {
+    console.error(err);
+    toast.error("Failed to add to cart");
+  }
+};
 
-  const handleWishlist = () => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (!user) {
-      toast.warning("Login to Add wishlist!");
-      return;
-    }
+  const handleWishlist = async () => {
+    const token = localStorage.getItem("token");
 
-    let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+  if (!token) {
+    toast.warning("Login to Add whishlist!");
+    return;
+  }
 
-    if (inWishlist) {
-      wishlist = wishlist.filter((item) => item._id !== product._id);
-      localStorage.setItem("wishlist", JSON.stringify(wishlist));
-      toast.warn("Removed from wishlist");
-      setInWishlist(false);
-    } else {
-      wishlist.push(product);
-      localStorage.setItem("wishlist", JSON.stringify(wishlist));
-      toast.success("Added to wishlist!");
-      setInWishlist(true);
-    }
+  try {
+      await api.post("/wishlist/add", {
+      productId: product._id,
+    });
+
+    toast.success("Added to wishlist!");
+    setInWishlist(true);
+
+  } catch (err) {
+    console.error(err);
+    toast.error("Failed to add to wishlist");
+  }
   };
 
   const handleBuyNow = () => {
