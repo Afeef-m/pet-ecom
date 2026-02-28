@@ -32,9 +32,8 @@ export default function Login() {
       password,
     });
 
-    const { token, user } = res.data;
+    const { user } = res.data;
 
-    localStorage.setItem("token", token);
     localStorage.setItem("user", JSON.stringify(user));
 
     toast.success(`Welcome ${user.name}!`);

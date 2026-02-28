@@ -3,10 +3,12 @@ const cors = require("cors");
 require("dotenv").config();
 const connectDB = require("./config/db");
 
+const cookieParser = require("cookie-parser");
 const app = express();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(cookieParser());
 
 const allowedOrigins = [
   "http://localhost:5173",
