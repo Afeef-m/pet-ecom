@@ -13,10 +13,11 @@ export default function AdminManageUser() {
     return users
       .filter((u) => (filter === "All" ? true : u.status === filter))
       .filter((u) =>
-          u.name.toLowerCase().includes(searchLower) ||
-          u.email.toLowerCase().includes(searchLower)
+        (u.name || "").toLowerCase().includes(searchLower) ||
+        (u.email || "").toLowerCase().includes(searchLower)
       );
   }, [users, search, filter]);
+  
 
   return (
     <div className="container py-4">
@@ -62,7 +63,7 @@ export default function AdminManageUser() {
             <tbody>
               {filteredUsers.length > 0 ? (
                 filteredUsers.map((user) => {
-                  const userOrders = orders.filter((order) => order.user_Id === user.__id);
+                  const userOrders = orders.filter((order) => order.userId?._id === user._id);
 
                   return (
                     <tr key={user.__id}>

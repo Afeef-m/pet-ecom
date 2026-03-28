@@ -24,8 +24,8 @@ export default function AdminOrders() {
                 key={order._id}
                 style={{ width: "24rem" }}>
                 <h5>Order ID: {order._id}</h5>
-                <p><strong>User ID:</strong> {order.userId}</p>
-                <p><strong>User Name:</strong> {order.userName}</p>
+                <p><strong>User ID:</strong> {order.userId?._id}</p>
+                <p><strong>User Name:</strong> {order.userId?.name}</p>
                 <p><strong>Total:</strong> ₹{total.toLocaleString()}</p>
                 <p><strong>Status:</strong>{" "}
                   <span className="badge bg-info">{order.status}</span>
