@@ -76,6 +76,7 @@ export default function AdminProduct() {
   };
 
   if (loading) return <p className="text-center mt-5">Loading...</p>;
+  if (!products) return <p>Loading...</p>;
 
   return (
     <div className="container py-4">
@@ -203,7 +204,7 @@ export default function AdminProduct() {
               </tr>
             </thead>
             <tbody>
-              {products.length > 0 ? (
+             {products?.length > 0 ? (
                 products.map((item) => (
                   <tr key={item._id}>
                     <td>

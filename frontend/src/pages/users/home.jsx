@@ -43,10 +43,11 @@ export default function Home() {
         if (sortOrderFood !== "none") params.set("sort", sortOrderFood);
 
         const res = await api.get(`/products?${params.toString()}`);
-        setFoodProducts(res.data.data);
+        setFoodProducts(Array.isArray(res?.data?.data) ? res.data.data : []);
         setFoodTotalPages(res.data.totalPages);
       } catch (err) {
         console.error("FOOD ERROR:", err?.response || err);
+        setFoodProducts([]);
       } finally {
         setFoodLoading(false);
       }
@@ -70,10 +71,11 @@ export default function Home() {
         if (sortOrderAcc !== "none") params.set("sort", sortOrderAcc);
 
         const res = await api.get(`/products?${params.toString()}`);
-        setAccessories(res.data.data);
+        setAccessories(Array.isArray(res?.data?.data) ? res.data.data : []);
         setAccTotalPages(res.data.totalPages);
       } catch (err) {
         console.error("ACC ERROR:", err?.response || err);
+        setAccessories([]);
       } finally {
         setAccLoading(false);
       }
@@ -151,7 +153,7 @@ export default function Home() {
                   </div>
                 </div>
               ))
-            ) : foodProducts.length === 0 ? (
+            ) : !Array.isArray(foodProducts) || foodProducts.length === 0 ? (
               <div className="col-12 text-center text-muted">
                 No products found.
               </div>
@@ -266,7 +268,7 @@ export default function Home() {
                   </div>
                 </div>
               ))
-            ) : accessories.length === 0 ? (
+            ) : !Array.isArray(accessories) || accessories.length === 0 ? (
               <div className="col-12 text-center text-muted">
                 No accessories found.
               </div>
