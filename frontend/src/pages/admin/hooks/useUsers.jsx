@@ -1,37 +1,87 @@
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { api } from "../../../api";
+import { toast } from "react-toastify";
 
 export default function useUsers() {
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const [users, setUsers] = useState([]);
-  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [total, setTotal] = useState(0);
+  const [limit, setLimit] = useState(5);
 
-  useEffect(() => {
-    api.get(`/users`)
-      .then((res) => {
-        const userList = res.data
-          .filter((u) => u.role === "user");
-        setUsers(userList);
-      });
+  const page   = parseInt(searchParams.get("page"))   || 1;
+  const search = searchParams.get("search")            || "";
+  const status = searchParams.get("status")            || "All";
 
-    api.get(`/orders`)
-      .then((res) => {
-        setOrders(res.data);
-      });
-  }, []);
+  const updateParams = (updates) => {
+    const current = Object.fromEntries(searchParams.entries());
+    const next = { ...current, ...updates };
 
-  const updateUserStatus = (id, status) => {
-    api.patch(`/users/${id}`, { status })
-      .then(() => {
-        setUsers((prev) =>
-          prev.map((u) => (u._id === id ? { ...u, status } : u))
-        );
-      });
+    if (next.page === "1")   delete next.page;
+    if (next.search === "")  delete next.search;
+    if (next.status === "All") delete next.status;
+
+    setSearchParams(next, { replace: true });
   };
 
-  const blockUser = (id) => updateUserStatus(id, "blocked");
-  const unblockUser = (id) => updateUserStatus(id, "active");
-  const deleteUser = (id) => updateUserStatus(id, "inactive");
-  const activateUser = (id) => updateUserStatus(id, "active");
+  const fetchUsers = async () => {
+    try {
+      setLoading(true);
+      const res = await api.get("/users", { params: { page, limit: 5, search, status }});
+      setUsers(res.data?.data || []);
+      setTotal(res.data?.total || 0);
+      setLimit(res.data?.limit || 5);
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to fetch users");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  return { users, orders, blockUser, unblockUser, deleteUser, activateUser };
+  useEffect(() => {
+    fetchUsers();
+  }, [page, search, status]);
+
+  const updateUserStatus = async (id, newStatus) => {
+    try {
+      await api.patch(`/users/${id}`, { status: newStatus });
+      fetchUsers();
+      toast.success(`User ${newStatus}`);
+    } catch (err) {
+      console.error(err);
+      toast.error("Update failed");
+    }
+  };
+
+  const handleSetSearch = (val) => {
+    updateParams({ search: val, page: "1" });
+  };
+
+  const handleSetStatus = (val) => {
+    updateParams({ status: val, page: "1" });
+  };
+
+  const handleSetPage = (val) => {
+    updateParams({ page: String(val) });
+  };
+
+  return {
+    users,
+    loading,
+    page,
+    total,
+    search,   
+    status,  
+    limit, 
+    setPage: handleSetPage,
+    setSearch: handleSetSearch,
+    setStatus: handleSetStatus,
+    blockUser:      (id) => updateUserStatus(id, "blocked"),
+    unblockUser:    (id) => updateUserStatus(id, "active"),
+    activateUser:   (id) => updateUserStatus(id, "active"),
+    deactivateUser: (id) => updateUserStatus(id, "inactive"),
+  };
 }

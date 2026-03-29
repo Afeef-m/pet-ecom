@@ -1,9 +1,15 @@
 import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
 
-function PublicRoute() {
+export default function PublicRoute() {
   const token = localStorage.getItem("token");
-  const user = JSON.parse(localStorage.getItem("user"));
+
+  let user = null;
+  try {
+    user = JSON.parse(localStorage.getItem("user"));
+  } catch {
+    user = null;
+  }
 
   if (token && user) {
     return user.role === "admin"
@@ -14,4 +20,3 @@ function PublicRoute() {
   return <Outlet />;
 }
 
-export default PublicRoute;

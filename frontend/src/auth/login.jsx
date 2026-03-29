@@ -8,49 +8,63 @@ import { api } from "../api";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
 
-  
   useEffect(() => {
     setEmail("");
     setPassword("");
-    }, []);
-    
-   const handleLogin = async (e) => {
+  }, []);
+
+ const handleLogin = async (e) => {
   e.preventDefault();
 
-  if (!email.includes("@gmail.com") || password.length < 4) {
-    toast.error("Enter valid email and password (min 4 characters)");
+  const trimmedEmail = email.trim().toLowerCase();
+  const trimmedPassword = password.trim();
+
+  if (!/\S+@\S+\.\S+/.test(trimmedEmail)) {
+    toast.error("Enter a valid email");
+    return;
+  }
+
+  if (trimmedPassword.length < 4) {
+    toast.error("Password must be at least 4 characters");
     return;
   }
 
   try {
+    setLoading(true);
+
     const res = await api.post("/auth/login", {
-      email,
-      password,
+      email: trimmedEmail,
+      password: trimmedPassword,
     });
 
     const { user, token } = res.data;
 
-localStorage.setItem("user", JSON.stringify(user));
-localStorage.setItem("token", token);
+    localStorage.setItem("user", JSON.stringify(user));
+    localStorage.setItem("token", token);
 
     toast.success(`Welcome ${user.name}!`);
 
-    setTimeout(() => {
-      if (location.state?.from) {
-        navigate(location.state.from.pathname, { replace: true });
-      } else if (user.role === "admin") {
-        navigate("/admin-dashboard", { replace: true });
-      } else {
-        navigate("/", { replace: true });
-      }
-    }, 800);
+    if (location.state?.from) {
+      navigate(location.state.from.pathname, { replace: true });
+    } else if (user.role === "admin") {
+      navigate("/admin-dashboard", { replace: true });
+    } else {
+      navigate("/", { replace: true });
+    }
 
   } catch (error) {
-    toast.error(error.response?.data?.message || "Login failed");
+    if (!error.response) {
+      toast.error("Server not reachable");
+    } else {
+      toast.error(error.response.data?.message || "Login failed");
+    }
+  } finally {
+    setLoading(false);
   }
 };
 
@@ -62,7 +76,8 @@ localStorage.setItem("token", token);
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
-      }}>
+      }}
+    >
       <div
         className="card shadow-lg p-4"
         style={{
@@ -72,7 +87,8 @@ localStorage.setItem("token", token);
           backdropFilter: "blur(5px)",
           border: "1px solid rgba(255, 255, 255, 0.3)",
           color: "#000",
-        }}>
+        }}
+      >
         <h2 className="text-center mb-4 text-primary fw-bold">Login Here</h2>
 
         <form onSubmit={handleLogin} autoComplete="off">
@@ -85,7 +101,8 @@ localStorage.setItem("token", token);
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               autoComplete="off"
-              required />
+              required
+            />
           </div>
           <div className="mb-3">
             <label className="form-label fw-semibold">Password</label>
@@ -96,7 +113,8 @@ localStorage.setItem("token", token);
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               autoComplete="new-password"
-              required />
+              required
+            />
           </div>
 
           <button
@@ -107,9 +125,16 @@ localStorage.setItem("token", token);
               fontSize: "1rem",
               borderRadius: "8px",
               transition: "all 0.3s ease",
-            }} >
-            Sign in
-            <SlArrowRightCircle size={20} />
+            }}
+            disabled={loading}
+          >
+            {loading ? ( "Signing in..." )
+            :(
+              <>
+              Sign in
+              <SlArrowRightCircle size={20} />
+              </>
+            )}
           </button>
 
           <p className="mt-3 text-center">
@@ -123,5 +148,3 @@ localStorage.setItem("token", token);
     </div>
   );
 }
-
-

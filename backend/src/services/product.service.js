@@ -11,8 +11,13 @@ exports.getProducts = async (query) => {
     filter.name = { $regex: query.search.trim(), $options: "i" };
   }
 
+  if (query.showAll !== "true") {
+    filter.status = "active";
+  }
+
+
 const page = Math.max(parseInt(query.page) || 1, 1);
-const limit = Math.min(parseInt(query.limit) || 10, 50);
+const limit = Math.min(parseInt(query.limit) || 5, 100);
 const skip = (page - 1) * limit;
 
  let sortOption = { createdAt: -1 }; 
@@ -21,7 +26,7 @@ const skip = (page - 1) * limit;
 
 const [products, total] = await Promise.all([
   Product.find(filter)
-    .select("name price image category type")
+    .select("name price image category type weight description status")
     .sort(sortOption)
     .skip(skip)
     .limit(limit)
@@ -50,6 +55,8 @@ exports.createProduct = async (data) => {
     "category",
     "type",
     "description",
+    "weight",
+    "status"
   ];
 
   const filteredData = {};

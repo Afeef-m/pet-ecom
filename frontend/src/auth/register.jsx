@@ -1,23 +1,24 @@
-import React, { useState } from 'react';
-import { toast } from 'react-toastify';
+import React, { useState } from "react";
+import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import { SlArrowRightCircle } from "react-icons/sl";
-import { api } from '../api';
+import { api } from "../api";
 
 export default function Register() {
-   const [name, setName] = useState("");
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleRegister = async () => {
-    if( !name, !email, !password){
-      toast.info("Fill all field")
+    if (!name || !email || !password) {
+      toast.info("Fill all fields");
       return;
     }
 
-    if (!email.includes("@gmail.com")) {
-      toast.warning("Please enter a valid Gmail address.");
+    if (!/\S+@\S+\.\S+/.test(email)) {
+      toast.warning("Enter a valid email");
       return;
     }
 
@@ -35,16 +36,22 @@ export default function Register() {
     }
 
     try {
-      await api.post(`/auth/register`,{
-        name, email, password
+      setLoading(true);
+
+      await api.post(`/auth/register`, {
+        name: name.trim(),
+        email: email.trim(),
+        password: password.trim(),
       });
+
       toast.success("Registered successfully!");
       navigate("/login");
     } catch (err) {
       toast.error(err.response?.data?.message || "Registration failed.");
+    } finally {
+      setLoading(false);
     }
   };
-
 
   return (
     <div
@@ -77,7 +84,7 @@ export default function Register() {
             className="form-control"
             placeholder="Name"
             autoComplete="off"
-            onChange={(e) => setName(e.target.value )}
+            onChange={(e) => setName(e.target.value)}
           />
         </div>
 
@@ -88,7 +95,7 @@ export default function Register() {
             className="form-control"
             placeholder="Email"
             autoComplete="off"
-            onChange={(e) => setEmail(e.target.value )}
+            onChange={(e) => setEmail(e.target.value)}
           />
         </div>
 
@@ -99,20 +106,29 @@ export default function Register() {
             className="form-control"
             placeholder="Password"
             autoComplete="off"
-            onChange={(e) => setPassword( e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
           />
         </div>
 
-        <button className="btn btn-success w-100 fw-semibold"
+        <button
+          className="btn btn-success w-100 fw-semibold"
           style={{
             padding: "10px 0",
             fontSize: "1rem",
             borderRadius: "8px",
             transition: "all 0.3s ease",
           }}
-          onClick={handleRegister}>
-          Sign Up
-          <SlArrowRightCircle size={20} style={{ marginLeft: "8px" }} />
+          disabled={loading}
+          onClick={handleRegister}
+        >
+          {loading ? (
+            "Registering..."
+          ) : (
+            <>
+              Sign Up
+              <SlArrowRightCircle size={20} style={{ marginLeft: "8px" }} />
+            </>
+          )}
         </button>
 
         <p className="mt-3 text-center">
@@ -125,5 +141,3 @@ export default function Register() {
     </div>
   );
 }
-
-
