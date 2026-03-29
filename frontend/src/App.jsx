@@ -22,6 +22,7 @@ import Checkout from './pages/users/checkout';
 import Orders from './pages/users/orders';
 import Payment from './pages/users/payment';
 import Profile from './pages/users/profile';
+import Footer from './components/footer';
 
 function App() {
   return (
@@ -58,6 +59,7 @@ function App() {
        <Route path='/admin-orders' element={<AdminOrders/>}/>
        </Route>
       </Routes>
+      <Footer/>
     </>
   );
 }

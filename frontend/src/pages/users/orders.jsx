@@ -44,6 +44,14 @@ export default function Orders() {
     }
   };
 
+  const statusClass = {
+    Delivered: "bg-success",
+    Cancelled: "bg-danger",
+    Pending: "bg-warning text-dark",
+    Processing: "bg-info",
+    Shipped: "bg-primary",
+  };
+
   if (loading) {
     return (
       <div className="vh-100 d-flex justify-content-center align-items-center text-secondary gap-2">
@@ -83,13 +91,7 @@ export default function Orders() {
       ) : (
         <div className="d-flex flex-column gap-4">
           {orders.map((order) => {
-            const total = order.items.reduce(
-              (sum, item) =>
-                sum +
-                Number(item.productId?.price || 0) * Number(item.quantity),
-              0,
-            );
-
+            const total = order.totalPrice;
             return (
               <div
                 key={order._id}
@@ -105,11 +107,7 @@ export default function Orders() {
 
                   <span
                     className={`badge rounded-pill px-3 py-2 ${
-                      order.status === "Delivered"
-                        ? "bg-success"
-                        : order.status === "Cancelled"
-                          ? "bg-danger"
-                          : "bg-warning text-dark"
+                      statusClass[order.status] || "bg-secondary"
                     }`}
                   >
                     {order.status}
@@ -164,7 +162,7 @@ export default function Orders() {
                       <div className="fw-semibold">
                         ₹
                         {(
-                          item.productId?.price * item.quantity
+                          item.priceAtPurchase * item.quantity
                         ).toLocaleString()}
                       </div>
                     </div>

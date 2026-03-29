@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import "./home.css";
 import { api } from "../../api";
+import Banner from "../../components/banner";
+import PromoBanner from "../../components/promoBanner";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
-function Home() {
-  const [products, setProducts] = useState([]);
-  const [accessories, setAccessories] = useState([]);
+export default function Home() {
   const [category, setCategory] = useState("All");
 
   const [searchFood, setSearchFood] = useState("");
@@ -14,103 +14,84 @@ function Home() {
 
   const [searchAcc, setSearchAcc] = useState("");
   const [sortOrderAcc, setSortOrderAcc] = useState("none");
-  const [loading, setLoading] = useState(false)
+
+  const [foodPage, setFoodPage] = useState(1);
+  const [foodTotalPages, setFoodTotalPages] = useState(1);
+  const [foodProducts, setFoodProducts] = useState([]);
+  const [foodLoading, setFoodLoading] = useState(true);
+
+  const [accPage, setAccPage] = useState(1);
+  const [accTotalPages, setAccTotalPages] = useState(1);
+  const [accessories, setAccessories] = useState([]);
+  const [accLoading, setAccLoading] = useState(true);
+
+  const skeletonCount = 4;
 
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true)
+    const fetchFood = async () => {
       try {
-        const [productsRes, accessoriesRes] = await Promise.all([
-          api.get(`/products?type=food`),
-          api.get(`/products?type=accessories`)
-        ]);
-        const uniqueProducts = Array.from(new Map(productsRes.data.map((item) => [item._id, item])).values());
-        const uniqueAccessories = Array.from(new Map(accessoriesRes.data.map((item) => [item._id, item])).values());
+        setFoodLoading(true);
 
-        setProducts(uniqueProducts);
-        setAccessories(uniqueAccessories);
-      } catch {
-        toast.error("Failed to fetch products/accessories");
-      }finally{
-        setLoading(false)
+        const params = new URLSearchParams({
+          type: "food",
+          page: foodPage,
+          limit: 4,
+        });
+
+        if (searchFood.trim()) params.set("search", searchFood.trim());
+        if (category !== "All") params.set("category", category);
+        if (sortOrderFood !== "none") params.set("sort", sortOrderFood);
+
+        const res = await api.get(`/products?${params.toString()}`);
+        setFoodProducts(res.data.data);
+        setFoodTotalPages(res.data.totalPages);
+      } catch (err) {
+        console.error("FOOD ERROR:", err?.response || err);
+      } finally {
+        setFoodLoading(false);
       }
     };
 
-    fetchData();
-  }, []);
+    fetchFood();
+  }, [foodPage, searchFood, category, sortOrderFood]);
 
-const skeletonCount = products.length || 4;
-  const filterProducts =
-    category === "All"
-      ? products
-      : products.filter((item) => item.category === category);
+  useEffect(() => {
+    const fetchAccessories = async () => {
+      try {
+        setAccLoading(true);
 
-  const searchProducts = filterProducts.filter((item) =>
-    item.name.toLowerCase().includes(searchFood.toLowerCase())
-  );
+        const params = new URLSearchParams({
+          type: "accessories",
+          page: accPage,
+          limit: 4,
+        });
 
-  const sortedProducts = [...searchProducts].sort((a, b) => {
-    if (sortOrderFood === "lowToHigh") return a.price - b.price;
-    if (sortOrderFood === "highToLow") return b.price - a.price;
-    return 0;
-  });
+        if (searchAcc.trim()) params.set("search", searchAcc.trim());
+        if (sortOrderAcc !== "none") params.set("sort", sortOrderAcc);
 
-  const searchAccessories = accessories.filter((item) =>
-    item.name.toLowerCase().includes(searchAcc.toLowerCase())
-  );
+        const res = await api.get(`/products?${params.toString()}`);
+        setAccessories(res.data.data);
+        setAccTotalPages(res.data.totalPages);
+      } catch (err) {
+        console.error("ACC ERROR:", err?.response || err);
+      } finally {
+        setAccLoading(false);
+      }
+    };
 
-  const sortedAccessories = [...searchAccessories].sort((a, b) => {
-    if (sortOrderAcc === "lowToHigh") return a.price - b.price;
-    if (sortOrderAcc === "highToLow") return b.price - a.price;
-    return 0;
-  });
+    fetchAccessories();
+  }, [accPage, searchAcc, sortOrderAcc]);
 
-
+  useEffect(() => {
+    setFoodPage(1);
+  }, [searchFood, category, sortOrderFood]);
+  useEffect(() => {
+    setAccPage(1);
+  }, [searchAcc, sortOrderAcc]);
 
   return (
-    <div className="home-page">
-      <section className="hero-section d-flex align-items-center bg-beige">
-  <div className="container d-flex flex-column flex-md-row align-items-center py-5">
-    
-    <div className="w-100 w-md-50 text-center">
-      {loading ? (
-        <div className="skeleton skeleton-image"></div>
-      ) : (
-        <img
-          src="/images/home-slide-bg.png"
-          alt="Pet Dog"
-          className="img-fluid"
-          style={{ maxHeight: "400px" }}
-        />
-      )}
-    </div>
-
-    <div className="w-100 w-md-50 text-center text-md-start px-md-5 mt-4 mt-md-0">
-      {loading ? (
-        <>
-          <div className="skeleton skeleton-text" style={{ width: "30%" }}></div>
-          <div className="skeleton skeleton-title"></div>
-          <div className="skeleton skeleton-text" style={{ width: "80%" }}></div>
-          <div className="skeleton skeleton-text" style={{ width: "70%" }}></div>
-        </>
-      ) : (
-        <>
-          <p className="text-uppercase text-muted small fw-semibold">
-            Save 10 - 20% Off
-          </p>
-          <h1 className="display-5 fw-bold">
-            Best Destination <br />
-            For <span className="highlight-text">Your Pets</span>
-          </h1>
-          <h3 className="lead mt-3 text-muted fw-normal hero-description">
-            Discover premium pet food and accessories...
-          </h3>
-        </>
-      )}
-    </div>
-  </div>
-</section>
-
+    <main>
+      <Banner />
       <div className="mini-navbar text-center py-3">
         <div className="category-nav mt-2">
           {["All", "Cat", "Dog"].map((cat) => (
@@ -125,98 +106,120 @@ const skeletonCount = products.length || 4;
         </div>
       </div>
 
-<section className="container py-4">
-  <div className="d-flex flex-column flex-md-row justify-content-between align-items-center mb-3 gap-3">
-    <input
-      type="text"
-      className="form-control"
-      placeholder="Search pet food..."
-      style={{ maxWidth: "300px", borderRadius: "15px" }}
-      value={searchFood}
-      onChange={(e) => setSearchFood(e.target.value)}
-    />
-    <select
-      className="form-select"
-      style={{ maxWidth: "200px" }}
-      value={sortOrderFood}
-      onChange={(e) => setSortOrderFood(e.target.value)}
-    >
-      <option value="none">Filter</option>
-      <option value="lowToHigh">Price: Low to High</option>
-      <option value="highToLow">Price: High to Low</option>
-    </select>
-  </div>
-
-  <h3 className="section-title">Pet Food</h3>
-
-  <div className="scroll-container">
-    <div className="row flex-nowrap">
-
-      {loading ? (
-        Array.from({ length: skeletonCount })
-        .map((_, index) => (
-          <div
-            className="col-8 col-sm-6 col-md-4 col-lg-3 mb-4"
-            key={index}
+      <section className="container py-4">
+        <div className="d-flex flex-column flex-md-row justify-content-between align-items-center mb-3 gap-3">
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Search pet food..."
+            style={{ maxWidth: "300px", borderRadius: "15px" }}
+            value={searchFood}
+            onChange={(e) => setSearchFood(e.target.value)}
+          />
+          <select
+            className="form-select"
+            style={{ maxWidth: "200px" }}
+            value={sortOrderFood}
+            onChange={(e) => setSortOrderFood(e.target.value)}
           >
-            <div className="product-card p-3">
-              <div className="skeleton skeleton-image mb-3"></div>
-              <div
-                className="skeleton skeleton-text"
-                style={{ width: "60%" }}
-              ></div>
-              <div
-                className="skeleton skeleton-text"
-                style={{ width: "40%" }}
-              ></div>
-            </div>
-          </div>
-        ))
-      ) : sortedProducts.length === 0 ? (
-        <div className="col-12 text-center text-muted">
-          No products found.
+            <option value="none">Filter</option>
+            <option value="lowToHigh">Price: Low to High</option>
+            <option value="highToLow">Price: High to Low</option>
+          </select>
         </div>
-      ) : (
-        sortedProducts.map((item) => (
-          <div
-            className="col-8 col-sm-6 col-md-4 col-lg-3 mb-4"
-            key={item._id}
-          >
-            <div className="product-card p-3">
-              <Link
-                to={`/product/${item._id}`}
-                style={{ textDecoration: "none", color: "inherit" }}
-              >
-                <img
-                  src={item.image}
-                  alt={item.name}
-                  className="product-image mb-3"
-                />
-                <hr />
-                <h6 className="product-title">{item.name}</h6>
-                <p className="product-price">₹{item.price}</p>
-              </Link>
-            </div>
+
+        <h3 className="section-title">Pet Food</h3>
+
+        <div className="scroll-container">
+          <div className="row flex-nowrap">
+            {foodLoading ? (
+              Array.from({ length: skeletonCount }).map((_, index) => (
+                <div
+                  className="col-8 col-sm-6 col-md-4 col-lg-3 mb-4"
+                  key={index}
+                >
+                  <div className="product-card p-3">
+                    <div className="skeleton skeleton-image mb-3"></div>
+                    <div
+                      className="skeleton skeleton-text"
+                      style={{ width: "60%" }}
+                    ></div>
+                    <div
+                      className="skeleton skeleton-text"
+                      style={{ width: "40%" }}
+                    ></div>
+                  </div>
+                </div>
+              ))
+            ) : foodProducts.length === 0 ? (
+              <div className="col-12 text-center text-muted">
+                No products found.
+              </div>
+            ) : (
+              foodProducts.map((item) => (
+                <div
+                  className="col-8 col-sm-6 col-md-4 col-lg-3 mb-4"
+                  key={item._id}
+                >
+                  <div className="product-card p-3">
+                    <Link
+                      to={`/product/${item._id}`}
+                      style={{ textDecoration: "none", color: "inherit" }}
+                    >
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="product-image mb-3"
+                      />
+                      <hr />
+                      <h6 className="product-title">{item.name}</h6>
+                      <p className="product-price">₹{item.price}</p>
+                    </Link>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
-        ))
-      )}
+          <div className="d-flex justify-content-center align-items-center gap-2 mt-4">
+            <button
+              disabled={foodPage === 1}
+              onClick={() => setFoodPage((prev) => prev - 1)}
+              className="btn btn-light d-flex align-items-center justify-content-center"
+              aria-label="Previous page"
+            >
+              <ChevronLeft size={18} />
+            </button>
 
-    </div>
-  </div>
-</section>
+            {Array.from({ length: foodTotalPages }, (_, i) => i + 1)
+              .slice(
+                Math.max(0, foodPage - 3),
+                Math.min(foodTotalPages, foodPage + 2),
+              )
+              .map((page) => (
+                <button
+                  key={page}
+                  onClick={() => setFoodPage(page)}
+                  className={`btn ${
+                    foodPage === page ? "btn-dark" : "btn-outline-secondary"
+                  }`}
+                >
+                  {page}
+                </button>
+              ))}
 
+            <button
+              disabled={foodPage === foodTotalPages}
+              onClick={() => setFoodPage((prev) => prev + 1)}
+              className="btn btn-light d-flex align-items-center justify-content-center"
+              aria-label="Next page"
+            >
+              <ChevronRight size={18} />
+            </button>
+          </div>
+        </div>
+      </section>
       {/* Promo Banner */}
-    <div className="banner-section container my-4">
-  {loading ? (
-    <div className="skeleton skeleton-banner"></div>
-  ) : (
-    <img
-      src="/images/whiskas-slide.jpg"
-      alt="whiskas banner"
-      className="img-fluid rounded promo-img shadow-sm"
-    />
-  )}
-</div>
+      <PromoBanner />
 
       {/* Accessories Section */}
       <section className="container py-4">
@@ -242,12 +245,33 @@ const skeletonCount = products.length || 4;
         </div>
 
         <h3 className="section-title">Accessories</h3>
-        {sortedAccessories.length === 0 ? (
-          <p className="text-center text-muted">No accessories found.</p>
-        ) : (
-          <div className="scroll-container">
-            <div className="row flex-nowrap">
-              {sortedAccessories.map((item) => (
+        <div className="scroll-container">
+          <div className="row flex-nowrap">
+            {accLoading ? (
+              Array.from({ length: skeletonCount }).map((_, index) => (
+                <div
+                  className="col-8 col-sm-6 col-md-4 col-lg-3 mb-4"
+                  key={index}
+                >
+                  <div className="product-card p-3">
+                    <div className="skeleton skeleton-image mb-3"></div>
+                    <div
+                      className="skeleton skeleton-text"
+                      style={{ width: "60%" }}
+                    ></div>
+                    <div
+                      className="skeleton skeleton-text"
+                      style={{ width: "40%" }}
+                    ></div>
+                  </div>
+                </div>
+              ))
+            ) : accessories.length === 0 ? (
+              <div className="col-12 text-center text-muted">
+                No accessories found.
+              </div>
+            ) : (
+              accessories.map((item) => (
                 <div
                   className="col-8 col-sm-6 col-md-4 col-lg-3 mb-4"
                   key={item._id}
@@ -268,22 +292,46 @@ const skeletonCount = products.length || 4;
                     </Link>
                   </div>
                 </div>
-              ))}
-            </div>
+              ))
+            )}
           </div>
-        )}
+          <div className="d-flex justify-content-center align-items-center gap-2 mt-4">
+            <button
+              disabled={accPage === 1}
+              onClick={() => setAccPage((prev) => prev - 1)}
+              className="btn btn-light d-flex align-items-center justify-content-center"
+              aria-label="Previous page"
+            >
+              <ChevronLeft size={18} />
+            </button>
+            {Array.from({ length: accTotalPages }, (_, i) => i + 1)
+              .slice(
+                Math.max(0, accPage - 3),
+                Math.min(accTotalPages, accPage + 2),
+              )
+              .map((page) => (
+                <button
+                  key={page}
+                  onClick={() => setAccPage(page)}
+                  className={`btn ${
+                    accPage === page ? "btn-dark" : "btn-outline-secondary"
+                  }`}
+                >
+                  {page}
+                </button>
+              ))}
+
+            <button
+              disabled={accPage === accTotalPages}
+              onClick={() => setAccPage((prev) => prev + 1)}
+              className="btn btn-light d-flex align-items-center justify-content-center"
+              aria-label="Next page"
+            >
+              <ChevronRight size={18} />
+            </button>
+          </div>
+        </div>
       </section>
-
-      {/* Footer */}
-      <footer className="text-center mt-5 pb-3">
-        <div className="footer-line mx-auto mb-2"></div>
-
-        <p className="text-muted">
-          © {new Date().getFullYear()} Pet Plus. All rights reserved.
-        </p>
-      </footer>
-    </div>
+    </main>
   );
 }
-
-export default Home;

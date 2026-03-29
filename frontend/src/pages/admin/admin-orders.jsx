@@ -32,11 +32,11 @@ export default function AdminOrders() {
                 </p>
 
                 <ul className="list-group list-group-flush mb-2">
-                  {order.items.map((item, idx) => (
-                    <li key={idx}
+                  {order.items.map((item) => (
+                    <li key={item._id}
                       className="list-group-item d-flex justify-content-between">
                       {item.name} × {item.quantity}
-                      <span>₹{item.price * item.quantity}</span>
+                      <span>₹{item.priceAtPurchase * item.quantity}</span>
                     </li>
                   ))}
                 </ul>
