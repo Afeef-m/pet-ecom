@@ -24,7 +24,7 @@ exports.addToCart = async (req, res, next) => {
 
 exports.updateCart = async (req, res, next) => {
   try {
-    const cart = await cartService.updateCartItem(
+    const cart = await cartService.updateCart(
       req.user.id,
       req.body.productId,
       req.body.change

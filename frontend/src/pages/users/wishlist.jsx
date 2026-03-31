@@ -1,20 +1,25 @@
-import { HeartHandshake, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
+import { HeartHandshake, X } from "lucide-react";
 import { toast } from "react-toastify";
 import { api } from "../../api";
 import { useNavigate } from "react-router-dom";
 
 export default function Wishlist() {
   const [wishlist, setWishlist] = useState([]);
+  const [loading, setLoading] = useState(false);
+  
   const navigate = useNavigate()
 
 useEffect(() => {
   const fetchWishlist = async () => {
     try {
+      setLoading(true);
       const res = await api.get("/wishlist");
       setWishlist(res.data?.items || []);
     } catch (err) {
       console.error(err);
+    }finally{
+      setLoading(false);
     }
   };
 
@@ -49,6 +54,10 @@ const addToCart = async (item) => {
     toast.error("Failed to move item");
   }
 };
+
+if (loading){
+  return <p>Loading...</p>
+}
 
   return (
     <div className="container py-5">

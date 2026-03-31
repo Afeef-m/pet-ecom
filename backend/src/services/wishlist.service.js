@@ -1,28 +1,29 @@
-const Cart = require("../models/Cart");
+const Wishlist = require("../models/Wishlist");
 const Product = require("../models/Product");
 const ApiError = require("../utils/ApiError");
 
-const calcTotal = (cart) =>
-  cart.items.reduce(
+const calcTotal = (wishlist) =>
+  wishlist.items.reduce(
     (sum, item) =>
       sum + (item.priceAtAdd || item.productId?.price || 0) * item.quantity,
     0
   );
 
-const populatedResponse = async (cart) => {
-  const populated = await cart.populate("items.productId");
+  const populatedResponse = async (wishlist) => {
+  const populated = await wishlist.populate("items.productId");
   return { ...populated.toObject(), total: calcTotal(populated) };
 };
 
-exports.getCart = async (userId) => {
-  let cart = await Cart.findOne({ userId }).populate("items.productId");
-  if (!cart) {
-    cart = await Cart.create({ userId, items: [] });
+
+exports.getWishlist = async (userId) => {
+  let wishlist = await Wishlist.findOne({ userId }).populate("items.productId");
+  if (!wishlist) {
+    wishlist = await wishlist.create({ userId, items: [] });
   }
-  return { ...cart.toObject(), total: calcTotal(cart) };
+  return { ...wishlist.toObject(), total: calcTotal(wishlist) };
 };
 
-exports.addToCart = async (userId, productId, quantity) => {
+exports.addToWishlist = async (userId, productId, quantity) => {
   const qty = Number(quantity) || 1;
   if (qty <= 0) throw new ApiError("Invalid quantity", 400);
 
@@ -31,10 +32,10 @@ exports.addToCart = async (userId, productId, quantity) => {
 
   const hasStock = typeof product.stock === "number";
 
-  let cart = await Cart.findOne({ userId });
-  if (!cart) cart = new Cart({ userId, items: [] });
+  let wishlist = await Wishlist.findOne({ userId });
+  if (!wishlist) wishlist = new Wishlist({ userId, items: [] });
 
-  const existingItem = cart.items.find(
+  const existingItem = wishlist.items.find(
     (item) => item.productId.toString() === productId
   );
 
@@ -51,32 +52,33 @@ exports.addToCart = async (userId, productId, quantity) => {
     if (hasStock && qty > product.stock) {
       throw new ApiError("Insufficient stock", 400);
     }
-    cart.items.push({
+    wishlist.items.push({
       productId,
       quantity: qty,
       priceAtAdd: product.price,
     });
   }
 
-  await cart.save();
-  return populatedResponse(cart); 
+  await wishlist.save();
+  return populatedResponse(wishlist); 
 };
 
-exports.updateCart = async (userId, productId, change) => {
-  const cart = await Cart.findOne({ userId });
-  if (!cart) throw new ApiError("Cart not found", 404);
 
-  const item = cart.items.find((i) => i.productId.toString() === productId);
+exports.updateWishlist = async (userId, productId, change) => {
+  const wishlist = await Wishlist.findOne({ userId });
+  if (!wishlist) throw new ApiError("Wishlist not found", 404);
+
+  const item = wishlist.items.find((i) => i.productId.toString() === productId);
   if (!item) throw new ApiError("Item not found", 404);
 
   const newQty = item.quantity + change;
 
   if (newQty <= 0) {
-    cart.items = cart.items.filter(
+    wishlist.items = wishlist.items.filter(
       (i) => i.productId.toString() !== productId
     );
-    await cart.save();
-    return populatedResponse(cart);
+    await wishlist.save();
+    return populatedResponse(wishlist);
   }
 
   const product = await Product.findById(productId);
@@ -88,27 +90,27 @@ exports.updateCart = async (userId, productId, change) => {
   }
 
   item.quantity = newQty;
-  await cart.save();
-  return populatedResponse(cart);
+  await wishlist.save();
+  return populatedResponse(wishlist);
 };
 
 exports.removeItem = async (userId, productId) => {
-  const cart = await Cart.findOne({ userId });
-  if (!cart) throw new ApiError("Cart not found", 404);
+  const wishlist = await Wishlist.findOne({ userId });
+  if (!wishlist) throw new ApiError("Wishlist not found", 404);
 
-  cart.items = cart.items.filter(
+  wishlist.items = wishlist.items.filter(
     (item) => item.productId.toString() !== productId
   );
 
-  await cart.save();
-  return populatedResponse(cart);
+  await wishlist.save();
+  return populatedResponse(wishlist);
 };
 
-exports.clearCart = async (userId) => {
-  const cart = await Cart.findOne({ userId });
-  if (cart) {
-    cart.items = [];
-    await cart.save();
+exports.clearWishlist = async (userId) => {
+  const wishlist = await Wishlist.findOne({ userId });
+  if (wishlist) {
+    wishlist.items = [];
+    await wishlist.save();
   }
-  return { message: "Cart cleared" };
+  return { message: "Wishlist cleared" };
 };
