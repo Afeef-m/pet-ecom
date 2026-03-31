@@ -8,7 +8,7 @@ const app = express();
 
 // middlewares
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));baseURL: "http://localhost:5000/api"
 app.use(cookieParser());
 
 // CORS

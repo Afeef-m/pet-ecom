@@ -24,6 +24,7 @@ export default function AdminProduct() {
     type: "",
     price: "",
     weight: "",
+    stock: "",
     image: "",
     description: "",
     status: "active",
@@ -41,6 +42,7 @@ export default function AdminProduct() {
       type: "",
       price: "",
       weight: "",
+      stock: "",
       image: "",
       description: "",
       status: "active",
@@ -49,7 +51,13 @@ export default function AdminProduct() {
   };
 
   const handleAddOrUpdate = () => {
-    if (!form.name || !form.price || !form.image || !form.category || !form.type) {
+    if (
+      !form.name ||
+      !form.price ||
+      !form.image ||
+      !form.category ||
+      !form.type
+    ) {
       toast.error("Please fill all required fields");
       return;
     }
@@ -68,6 +76,7 @@ export default function AdminProduct() {
       type: item.type,
       price: item.price,
       weight: item.weight || "",
+      stock: item.stock || "",
       image: item.image,
       description: item.description || "",
       status: item.status,
@@ -80,7 +89,10 @@ export default function AdminProduct() {
 
   return (
     <div className="container py-4">
-      <div className="border rounded p-4" style={{ backgroundColor: "#f9f9f9" }}>
+      <div
+        className="border rounded p-4"
+        style={{ backgroundColor: "#f9f9f9" }}
+      >
         <h2 className="text-center mb-4">Admin Product Management</h2>
 
         {/* Form */}
@@ -142,6 +154,16 @@ export default function AdminProduct() {
                 className="form-control"
               />
             </div>
+            <div className="col-12 col-md-2">
+              <input
+                type="number"
+                name="stock"
+                value={form.stock || ""}
+                onChange={handleChange}
+                placeholder="Stock"
+                className="form-control"
+              />
+            </div>
             <div className="col-12 col-md-6">
               <input
                 type="text"
@@ -162,7 +184,10 @@ export default function AdminProduct() {
               />
             </div>
             <div className="col-12 text-end">
-              <button className="btn btn-success me-2" onClick={handleAddOrUpdate}>
+              <button
+                className="btn btn-success me-2"
+                onClick={handleAddOrUpdate}
+              >
                 {editId ? "Update" : "Add"} Product
               </button>
               {editId && (
@@ -178,7 +203,7 @@ export default function AdminProduct() {
         <div className="mb-3 d-flex flex-column flex-sm-row justify-content-between align-items-center gap-2">
           <h5 className="mb-0">Products List</h5>
           <select
-            value={filter}          
+            value={filter}
             onChange={(e) => setFilter(e.target.value)}
             className="form-select w-auto"
           >
@@ -204,7 +229,7 @@ export default function AdminProduct() {
               </tr>
             </thead>
             <tbody>
-             {products?.length > 0 ? (
+              {products?.length > 0 ? (
                 products.map((item) => (
                   <tr key={item._id}>
                     <td>
@@ -222,7 +247,9 @@ export default function AdminProduct() {
                     <td>
                       <span
                         className={`badge ${
-                          item.status === "inactive" ? "bg-secondary" : "bg-success"
+                          item.status === "inactive"
+                            ? "bg-secondary"
+                            : "bg-success"
                         }`}
                       >
                         {item.status}
@@ -240,7 +267,7 @@ export default function AdminProduct() {
                         onClick={() =>
                           updateStatus(
                             item._id,
-                            item.status === "active" ? "inactive" : "active"
+                            item.status === "active" ? "inactive" : "active",
                           )
                         }
                       >
@@ -285,7 +312,7 @@ export default function AdminProduct() {
                   (p) =>
                     p === 1 ||
                     p === totalPages ||
-                    (p >= page - 1 && p <= page + 1)
+                    (p >= page - 1 && p <= page + 1),
                 )
                 .reduce((acc, p, idx, arr) => {
                   if (idx > 0 && p - arr[idx - 1] > 1) acc.push("...");
@@ -309,10 +336,12 @@ export default function AdminProduct() {
                         {item}
                       </button>
                     </li>
-                  )
+                  ),
                 )}
 
-              <li className={`page-item ${page === totalPages ? "disabled" : ""}`}>
+              <li
+                className={`page-item ${page === totalPages ? "disabled" : ""}`}
+              >
                 <button
                   className="page-link"
                   onClick={() => setPage(page + 1)}

@@ -22,7 +22,7 @@ exports.getProductById = async (req, res) => {
     return res.status(404).json({ message: "Product not found" });
   }
 
-  res.json(product);
+  res.json({ data: product });
 };
 
 exports.createProduct = async (req, res) => {
@@ -41,7 +41,7 @@ exports.updateProduct = async (req, res) => {
       req.body
     );
 
-    res.json(product);
+    res.json({ data: product });
   } catch (err) {
     res.status(400).json({ message: err.message });
   }

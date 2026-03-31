@@ -7,15 +7,15 @@ function ProductDetails() {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
-  const [inCart, setInCart] = useState(false);
   const [inWishlist, setInWishlist] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
   useEffect(() => {
     api
       .get(`/products/${id}`)
-      .then((res) => setProduct(res.data))
+      .then((res) => setProduct(res.data?.data || res.data))
       .catch(() => setProduct(null));
   }, [id]);
 
@@ -29,18 +29,24 @@ const handleCart = async () => {
     return;
   }
 
+  const qty = Number(quantity);
+
+  if (!qty || qty <= 0) {
+    toast.warning("Enter valid quantity");
+    return;
+  }
+
   try {
-     await api.post("/cart/add", {
+    await api.post("/cart/add", {
       productId: product._id,
-      quantity: Number(quantity),
+      quantity: qty,
     });
-
+setLoading(true);
     toast.success("Added to cart!");
-    setInCart(true);
-
   } catch (err) {
     console.error(err);
-    toast.error("Failed to add to cart");
+    toast.error(err.response?.data?.message || "Failed to add to cart");
+    setLoading(false);
   }
 };
 
@@ -96,7 +102,9 @@ const handleCart = async () => {
           <h2 className="fw-bold">{product.name}</h2>
           <p className="text-muted">Category: {product.category}</p>
           <p className="text-muted">
-            Weight: {product.weight || "Not specified"}
+            Weight: {product.weight?.value 
+  ? `${product.weight.value}${product.weight.unit}` 
+  : "Not specified"}
           </p>
 
           <p
@@ -118,16 +126,16 @@ const handleCart = async () => {
               type="number"
               min="1"
               value={quantity}
-              onChange={(e) => setQuantity(e.target.value)}
+              onChange={(e) => setQuantity(Number(e.target.value))}
               className="form-control"
               style={{ width: "80px" }}
             />
           </div>
 
           <div className="d-flex flex-wrap gap-3 mt-3">
-            <button className="btn btn-dark" onClick={handleCart}>
-              {inCart ? "Add More" : "Add to Cart"}
-            </button>
+           <button className="btn btn-dark" onClick={handleCart}>
+  Add to Cart
+</button>
 
             <button
               className={`btn ${inWishlist ? "btn-danger text-white" : "btn-outline-danger"

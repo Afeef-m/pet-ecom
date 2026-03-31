@@ -26,7 +26,7 @@ const skip = (page - 1) * limit;
 
 const [products, total] = await Promise.all([
   Product.find(filter)
-    .select("name price image category type weight description status")
+   .select("name price image category type weight description status stock")
     .sort(sortOption)
     .skip(skip)
     .limit(limit)
@@ -56,7 +56,8 @@ exports.createProduct = async (data) => {
     "type",
     "description",
     "weight",
-    "status"
+    "status",
+    "stock"
   ];
 
   const filteredData = {};
