@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { api } from "../../api";
 
-function ProductDetails() {
+export default function ProductDetails() {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
@@ -155,4 +155,4 @@ setLoading(true);
   );
 }
 
-export default ProductDetails;
+

@@ -25,7 +25,7 @@ app.use(
       if (!origin || allowedOrigins.includes(origin)) {
         return callback(null, true);
       }
-      callback(new Error("Not allowed by CORS"));
+      callback(new Error("CORS not allowed"));
     },
     credentials: true
   })
@@ -38,10 +38,14 @@ app.use("/api/auth", require("./routes/auth.routes"));
 app.use("/api/cart", require("./routes/cart.routes"));
 app.use("/api/wishlist", require("./routes/wishlist.routes"));
 app.use("/api/users", require("./routes/user.routes"));
+app.use("/api/checkout", require("./routes/checkout.routes"));
+
 
 // 404
-app.use((req, res) => {
-  res.status(404).json({ message: "Route not found" });
+app.use((req, res, next) => {
+  const err = new Error("Route not found");
+  err.statusCode = 404;
+  next(err);
 });
 
 // global error handler

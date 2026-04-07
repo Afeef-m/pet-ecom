@@ -99,12 +99,7 @@ export default function Orders() {
                 style={{ transition: "0.3s ease" }}
               >
                 {/* Header */}
-                <div className="d-flex justify-content-between align-items-center mb-3">
-                  <div>
-                    <h6 className="mb-1 text-muted">Order ID</h6>
-                    <p className="mb-0 fw-semibold">{order._id}</p>
-                  </div>
-
+                <div className="d-flex justify-content-end align-items-center mb-3">
                   <span
                     className={`badge rounded-pill px-3 py-2 ${
                       statusClass[order.status] || "bg-secondary"

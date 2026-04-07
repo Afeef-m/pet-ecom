@@ -1,41 +1,56 @@
-import React, { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { api } from "../../api";
 
-function Checkout() {
-  const location = useLocation();
+export default function Checkout() {
   const navigate = useNavigate();
+
+  const [cart, setCart] = useState([]);
   const [address, setAddress] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const user = JSON.parse(localStorage.getItem("user"));
-  const { cart } = location.state || {};
-
-  const total = cart?.reduce(
-    (acc, item) => acc + (item.productId?.price || 0) * item.quantity,
-    0,
-  );
-  const handleProceed = () => {
-    if (!user) {
-      toast.warning("Login first!");
-      return;
+  const fetchCart = async () => {
+    try {
+      const res = await api.get("/cart");
+      setCart(res.data.items || []);
+    } catch {
+      toast.error("Failed to load cart");
     }
+  };
 
+  useEffect(() => {
+    fetchCart();
+  }, []);
+
+  const total = cart.reduce(
+    (acc, item) => acc + (item.productId?.price || 0) * item.quantity,
+    0
+  );
+
+  const handleCheckout = async () => {
     if (!address.trim()) {
       toast.info("Please enter your address");
       return;
     }
 
-    navigate("/payment", {
-      state: {
-        user,
-        cart,
-        total,
-        address,
-      },
-    });
+    try {
+      setLoading(true);
+
+      await api.post("/checkout", { address });
+
+      toast.success("Order placed successfully!");
+
+      navigate("/orders"); 
+
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Checkout failed");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  if (!cart || cart.length === 0) {
+  if (cart.length === 0) {
     return <p className="text-center mt-5">No items to checkout.</p>;
   }
 
@@ -45,6 +60,7 @@ function Checkout() {
 
       <div className="card p-4 shadow-sm">
         <h5>Delivery Address</h5>
+
         <textarea
           className="form-control mb-3"
           rows="3"
@@ -54,6 +70,7 @@ function Checkout() {
         />
 
         <h5>Order Summary:</h5>
+
         {cart.map((item) => (
           <div
             key={item.productId?._id}
@@ -62,19 +79,23 @@ function Checkout() {
             <div>
               {item.productId?.name} (x {item.quantity})
             </div>
-            <div>₹{(item.productId?.price || 0) * item.quantity}</div>
+            <div>
+              ₹{(item.productId?.price || 0) * item.quantity}
+            </div>
           </div>
         ))}
+
         <hr />
         <h5>Total: ₹{total}</h5>
-        <div>
-          <button className="btn btn-success mt-3" onClick={handleProceed}>
-            Proceed to Payment
-          </button>
-        </div>
+
+        <button
+          className="btn btn-success mt-3"
+          onClick={handleCheckout}
+          disabled={loading}
+        >
+          {loading ? "Placing Order..." : "Place Order"}
+        </button>
       </div>
     </div>
   );
 }
-
-export default Checkout;
