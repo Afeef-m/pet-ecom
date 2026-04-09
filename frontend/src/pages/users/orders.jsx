@@ -17,6 +17,7 @@ export default function Orders() {
       try {
         const res = await api.get(`/orders/user/${user._id}`);
         setOrders(res.data);
+        console.log("User ID:", user._id);
       } catch (err) {
         console.error("Error fetching orders:", err);
         toast.error("Failed to load orders.");

@@ -14,10 +14,12 @@ exports.getUserOrders = async (req, res) => {
     return res.status(400).json({ message: "Invalid User Id" });
   }
 
-  if (req.user.id !== userId && req.user.role !== "admin") {
-    return res.status(403).json({ message: "Access denied" });
-  }
-
+  if (
+  req.user.id.toString() !== userId.toString() &&
+  req.user.role !== "admin"
+) {
+  return res.status(403).json({ message: "Access denied" });
+}
   const orders = await orderService.getOrdersByUser(userId);
   res.json(orders);
 };

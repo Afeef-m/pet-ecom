@@ -55,47 +55,72 @@ export default function Checkout() {
   }
 
   return (
-    <div className="container-sm w-50 py-5">
-      <h2>Checkout</h2>
+  <div className="container py-4 d-flex justify-content-center">
+  <div className="w-100" style={{ maxWidth: "500px" }}>
+    
+    {/* Title */}
+    <h3 className="fw-bold mb-4 text-center">Checkout</h3>
 
-      <div className="card p-4 shadow-sm">
-        <h5>Delivery Address</h5>
+    <div className="card border-0 shadow-sm rounded-4 p-4">
+
+      {/* Address Section */}
+      <div className="mb-4">
+        <h6 className="fw-semibold mb-2">Delivery Address</h6>
 
         <textarea
-          className="form-control mb-3"
+          className="form-control rounded-3"
           rows="3"
           placeholder="Enter your delivery address"
           value={address}
           onChange={(e) => setAddress(e.target.value)}
         />
-
-        <h5>Order Summary:</h5>
-
-        {cart.map((item) => (
-          <div
-            key={item.productId?._id}
-            className="d-flex justify-content-between"
-          >
-            <div>
-              {item.productId?.name} (x {item.quantity})
-            </div>
-            <div>
-              ₹{(item.productId?.price || 0) * item.quantity}
-            </div>
-          </div>
-        ))}
-
-        <hr />
-        <h5>Total: ₹{total}</h5>
-
-        <button
-          className="btn btn-success mt-3"
-          onClick={handleCheckout}
-          disabled={loading}
-        >
-          {loading ? "Placing Order..." : "Place Order"}
-        </button>
       </div>
+
+      {/* Order Summary */}
+      <div className="mb-3">
+        <h6 className="fw-semibold mb-3">Order Summary</h6>
+
+        <div className="d-flex flex-column gap-2">
+          {cart.map((item) => (
+            <div
+              key={item.productId?._id}
+              className="d-flex justify-content-between align-items-start"
+            >
+              <div className="small">
+                <div className="fw-medium">
+                  {item.productId?.name}
+                </div>
+                <div className="text-muted">
+                  Qty: {item.quantity}
+                </div>
+              </div>
+
+              <div className="fw-semibold">
+                ₹{(item.productId?.price || 0) * item.quantity}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <hr className="my-3" />
+
+      {/* Total */}
+      <div className="d-flex justify-content-between align-items-center mb-3">
+        <span className="fw-semibold">Total</span>
+        <span className="fw-bold fs-5">₹{total}</span>
+      </div>
+
+      {/* Button */}
+      <button
+        className="btn btn-success w-100 py-2 rounded-3 fw-semibold"
+        onClick={handleCheckout}
+        disabled={loading}
+      >
+        {loading ? "Placing Order..." : "Place Order"}
+      </button>
     </div>
+  </div>
+</div>
   );
 }

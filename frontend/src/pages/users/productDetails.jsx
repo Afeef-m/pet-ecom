@@ -72,19 +72,27 @@ setLoading(true);
   }
   };
 
-  const handleBuyNow = () => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (!user) {
-      toast.warning("Login to Buy");
-      return;
-    }
-    navigate("/checkout", {
-      state: {
-        from: "buyNow",
-        cart: [{ ...product, quantity: Number(quantity) }],
-      },
+const handleBuyNow = async () => {
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    toast.warning("Login to Buy");
+    return;
+  }
+
+  try {
+    await api.post("/cart/add", {
+      productId: product._id,
+      quantity: Number(quantity),
     });
-  };
+
+    navigate("/checkout"); 
+  } catch (err) {
+    toast.error("Failed to proceed");
+    console.error(err);
+    
+  }
+};
 
   return (
     <div className="container py-5">
