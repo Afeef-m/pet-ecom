@@ -40,6 +40,10 @@ app.use("/api/wishlist", require("./routes/wishlist.routes"));
 app.use("/api/users", require("./routes/user.routes"));
 app.use("/api/checkout", require("./routes/checkout.routes"));
 
+app.get("/api/health", (req, res) => {
+  res.status(200).json({ status: "ok" });
+});
+
 
 // 404
 app.use((req, res, next) => {
